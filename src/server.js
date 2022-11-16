@@ -215,7 +215,7 @@ app.get("/dodger", (req,res)=>{
     const PLAYERID = req.session.username;
 
     //check if there is a game waiting
-    //Note that CODE_ATTACKERs are games with 1 dodger waiting
+    //Note that CODE_ATTACKERs are games with 1 attacker waiting
     try{
         if(COOP_ATTACKERs.length == 0){
             //randomly generate a game id
