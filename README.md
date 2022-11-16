@@ -28,5 +28,5 @@ Sounds simple, but not so simple when you play it ;)
 |=========|--box.js : define the position and dimension of an entity, check distance and collision\
 |=========|--player.js : define the response on move states, wrapped with Attacker and Dodger\
 |=========|--enemy.js : define the enemy behavior\
-|=========|--game.js : define the game logic, encapsulated by PVP and COOP\ 
+|=========|--game.js : define the game logic, encapsulated by PVP and COOP\
 |====|--server.js : the main server script, with AJAX and Websocket handlers defined\
