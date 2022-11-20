@@ -31,12 +31,40 @@ const Socket = (function() {
          * 
          * If the screen is not currently being shown, nothing will happen
          * 
+         * When finished changing the backend, just delete this TODO. Nothing to do here. 
          * ===========================================
          */
         socket.on("updateload", () => {
             mainGame.startGame(); 
         });
 
+        /**
+         * ===========================================
+         * TODO: Send a socket message of "update"
+         * 
+         * Data expected is a Array of the following object. 
+         * If only one object, still wrap in an array
+         * 
+         * {
+         *  username: string; 
+         *  role: "Attacker" | "Dodger";    //Feel free to add more role here
+         *  position: {
+         *      x: number; 
+         *      y: number;
+         *  };
+         *  size: {
+         *      x: number;
+         *      y: number;
+         *  }
+         * }
+         * 
+         * The canvas will loop through this array and draw every object
+         * ===========================================
+         */
+        socket.on("update", (pos)=> {
+            let position = JSON.parse(pos);
+            mainGame.update(pos);
+        })
         
 
     };

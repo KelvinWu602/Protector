@@ -43,7 +43,7 @@ const mainGame = function() {
                 x: 50,
                 y: 50
             }
-        }
+        },
     ]
     
     const key_mapping = {
@@ -112,6 +112,10 @@ const mainGame = function() {
 
         //Calls first frame
         draw(); 
+    }
+
+    function update(pos){
+        positions = pos; 
     }
 
     function stopGame(){
@@ -210,5 +214,5 @@ const mainGame = function() {
         }
     }
 
-    return {draw, startGame, stopGame}
+    return {draw, startGame, stopGame, update}
 }();
