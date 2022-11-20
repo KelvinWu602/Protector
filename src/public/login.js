@@ -200,15 +200,14 @@ const Login = function () {
 
     function showLoadingScreen() {
         document.querySelector(".homebody").style.display = "none";
-        document.querySelector(".Loading").style.display = "flex";
+        loading.show();
     }
 
     function removeLoadingScreen() {
-        
     }
 
     function gameStart() {
-        document.querySelector(".Loading").style.display = "none";
+        loading.hide(); 
         document.querySelector("canvas").style.display = "block";
     }
 

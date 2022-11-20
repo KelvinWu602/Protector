@@ -3,6 +3,8 @@ const doGame = function() {
 
     let canvas_height = 500;
     let canvas_width = 500;
+
+    let gameIsGoing = false; 
     
     let player_x = 0;
     let player_y = 0;
@@ -89,6 +91,10 @@ const doGame = function() {
             Socket.postInput(moveState);
         }
     })
+
+    document.querySelector("#stopGameTest").addEventListener("click", ()=> {
+        stopGame(); 
+    })
     
     const ctx = document.getElementById('canvas').getContext('2d');
     
@@ -97,10 +103,18 @@ const doGame = function() {
     function startGame(){
         //Remove Loading Screen
         document.querySelector(".Loading").style.display = "none";
-        document.querySelector("canvas").style.display = "block";
+        document.querySelector(".mainGame").style.display = "block";
+
+        gameIsGoing = true; 
 
         //Calls first frame
         draw(); 
+    }
+
+    function stopGame(){
+        gameIsGoing = false; 
+        document.querySelector(".mainGame").style.display = "none";
+        ranking.showRanking();
     }
     
     function drawRect(x_pos, y_pos, width, height, color) {
@@ -174,9 +188,10 @@ const doGame = function() {
             }
         }
         
-    
-        window.requestAnimationFrame(draw);
+        if(gameIsGoing){
+            window.requestAnimationFrame(draw);
+        }
     }
 
-    return {draw, startGame}
+    return {draw, startGame, stopGame}
 }();

@@ -97,23 +97,62 @@
     <!-- Loading Screen -->
     <div class="Loading">
         <div>
-            <p>
+            <p id = 'loading-text'>
                 Loading...
             </p>
         </div>
     </div>
 
     <!-- Game Canvas -->
-    <canvas id="canvas" width="500" height="500">
+    <div class = "mainGame">
+        <canvas id="canvas" width="500" height="500">
 
-    </canvas>
+        </canvas>
+        <button id = "stopGameTest">Stop game</button>
+    </div>
+
+    <!-- Ranking Screen -->
+    <div class = "RankingBody">
+        <div class = "RankingContainer">
+            <div id = "ranking-head"></div>
+            <div class = "Ranking">
+                <div class = "RankingUsername">
+                    Fox Lee
+                </div>
+                <div class = "RankingPoints">
+                    123
+                </div>
+            </div>
+            <div class = "Ranking">
+                <div class = "RankingUsername">
+                    Kelvin Wu
+                </div>
+                <div class = "RankingPoints">
+                    456
+                </div>
+            </div>
+        </div>
+
+        <button id = "play-again-button">
+            Play Again
+        </button>
+    </div>
+    
 
 </body>
 
+<script src="loading.js"></script>
 <script src="socket.js"></script>
 <script src="doGame.js"></script>
 
 <script src="login.js"></script>
+<script src="ranking.js"></script>
+
+
+<script>
+    //The eqivalent of the jquery document ready
+    ranking.init();
+</script>
 
 <style>
     .homebody {
@@ -190,7 +229,7 @@
         margin-bottom: 5px;
     }
 
-    canvas {
+    .mainGame {
         border: 3px solid black;
         display: none;
     }
