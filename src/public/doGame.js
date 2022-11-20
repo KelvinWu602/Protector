@@ -93,6 +93,15 @@ const doGame = function() {
     const ctx = document.getElementById('canvas').getContext('2d');
     
     console.log(ctx);
+
+    function startGame(){
+        //Remove Loading Screen
+        document.querySelector(".Loading").style.display = "none";
+        document.querySelector("canvas").style.display = "block";
+
+        //Calls first frame
+        draw(); 
+    }
     
     function drawRect(x_pos, y_pos, width, height, color) {
         ctx.fillStyle = color;
@@ -140,6 +149,8 @@ const doGame = function() {
         // }
         //player_x += v_x;
         //player_y += v_y;
+
+        console.log("Frame");
     
         ctx.clearRect(0, 0, canvas_height, canvas_width)
     
@@ -167,11 +178,5 @@ const doGame = function() {
         window.requestAnimationFrame(draw);
     }
 
-    function start(){
-        console.log("STARTS");
-    }
-
-    return {draw, start}
+    return {draw, startGame}
 }();
-
-doGame.draw(); 
