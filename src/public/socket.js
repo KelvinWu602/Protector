@@ -14,6 +14,30 @@ const Socket = (function() {
     const connect = function() {
         socket = io();
 
+        /**
+         * When the player is matched up and the game is ready
+         */
+        socket.on("startsame", () => {
+            doGame.startGame(); 
+        });
+
+        /**
+         * ===========================================
+         * TODO: Add a new socket connection in the backend
+         * 
+         * This TODO is optional, but if you would want the player to know something during the loading
+         * Example: Currently matching you up with another person
+         * Use this function to update the loading screen text
+         * 
+         * If the screen is not currently being shown, nothing will happen
+         * 
+         * ===========================================
+         */
+        socket.on("updateload", () => {
+            doGame.startGame(); 
+        });
+
+        
 
     };
 

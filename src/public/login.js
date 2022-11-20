@@ -84,12 +84,15 @@ const Login = function () {
      */
     async function doSignin() {
 
-        showLoadingScreen();
+        hide(); 
+        loading.show();
         
         let signin = {
             username: userName,
             password: userPassword, 
         }
+
+        loading.changeText("Processing your signin request");
 
         /**
          * ===========================================
@@ -127,7 +130,7 @@ const Login = function () {
             setTimeout(() => resolve("done!"), 500);
         });
 
-        doGame.startGame(); 
+        loading.playerMatch();
     }
 
     /**
@@ -198,12 +201,15 @@ const Login = function () {
 
     init();
 
-    function showLoadingScreen() {
-        document.querySelector(".homebody").style.display = "none";
-        loading.show();
+    function removeLoadingScreen() {
     }
 
-    function removeLoadingScreen() {
+    function show() {
+        document.querySelector(".homebody").style.display = "flex";
+    }
+
+    function hide() {
+        document.querySelector(".homebody").style.display = "none";
     }
 
     function gameStart() {

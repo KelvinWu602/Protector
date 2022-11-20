@@ -100,9 +100,12 @@ const doGame = function() {
     
     console.log(ctx);
 
+    /**
+     * This function is called when the on the socket connection of "startgame"
+     */
     function startGame(){
         //Remove Loading Screen
-        document.querySelector(".Loading").style.display = "none";
+        loading.hide(); 
         document.querySelector(".mainGame").style.display = "block";
 
         gameIsGoing = true; 

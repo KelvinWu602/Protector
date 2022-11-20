@@ -12,5 +12,17 @@ const loading = function(){
         document.querySelector("#loading-text").textContent = text;
     }
 
-    return{show, hide, changeText}
+    async function playerMatch(){
+
+        changeText("Matching you with a player");
+
+        //Dummy delay, delete later
+        await new Promise(function (resolve) {
+            setTimeout(() => resolve("done!"), 500);
+        });
+
+        doGame.startGame(); 
+    }
+
+    return{show, hide, changeText, playerMatch}
 }();
