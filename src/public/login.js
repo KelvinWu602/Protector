@@ -210,6 +210,7 @@ const Login = function () {
 
     function hide() {
         document.querySelector(".homebody").style.display = "none";
+        document.querySelector(".homebodyBig").style.display = "none";
     }
 
     function gameStart() {
@@ -218,5 +219,7 @@ const Login = function () {
     }
 
     removeLoadingScreen();
+
+    return{hide}
 
 }()

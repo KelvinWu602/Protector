@@ -2,143 +2,167 @@
 <html lang="en">
 
 <head>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Orbitron&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-    <div class="homebody">
-        <div class="login" id="SignInLeft">
-            <div class="loginInner">
-                <div class="loginInnerPrompt">
-                    <h2>Sign In</h2>
-                    <p>Login here to play the game</p>
+
+    <div class="homebodyBig">
+        <div class="title">
+            <h1>P R O T E C T O R</h1>
+            <p>Online Game</p>
+        </div>
+
+        <div class="homebody">
+            <div class="login" id="SignInLeft">
+                <div class="loginInner">
+                    <div class="loginInnerPrompt">
+                        <h2>Sign In</h2>
+                        <p>Login here to play the game</p>
+                    </div>
+                    <div class="signin">
+                        <p class = "prompt">Username</p>
+                        <input id="usernameInput">
+                    </div>
+                    <div class="signin">
+                        <p class = "prompt">Password</p>
+                        <input id="passwordInput">
+                    </div>
+                    <div id="SignInWarning">
+                        Hello
+                    </div>
+                    <button id="LoginButton">
+                        Login
+                    </button>
+                    <a id="CreateAccount">
+                        Create new account
+                    </a>
                 </div>
-                <div class="signin">
-                    <p>Username</p>
-                    <input id="usernameInput">
-                </div>
-                <div class="signin">
-                    <p>Password</p>
-                    <input id="passwordInput">
-                </div>
-                <div id = "SignInWarning">
-                    Hello
-                </div>
-                <button id="LoginButton">
-                    Login
-                </button>
-                <a id="CreateAccount">
-                    Create new account
-                </a>
             </div>
-        </div>
 
-        <div class="login" id="CreateAccountLeft">
-            <div class="loginInner">
-                <div class="loginInnerPrompt">
-                    <h2>Create Account</h2>
-                    <p>Create an account to play the game</p>
-                </div>
-                <div class="signin">
-                    <p>Enter Username</p>
-                    <input id="usernameRegister">
-                </div>
-                <div class="signin">
-                    <p>Enter Password</p>
-                    <input id="passwordRegister">
-                </div>
-                <div class="signin">
-                    <p>Confirm Password</p>
-                    <input id="passwordRegisterConfirm">
-                </div>
-                <div id = "RegisterWarning">
+            <div class="login" id="CreateAccountLeft">
+                <div class="loginInner">
+                    <div class="loginInnerPrompt">
+                        <h2>Create Account</h2>
+                        <p>Create an account to play the game</p>
+                    </div>
+                    <div class="signin">
+                        <p class = "prompt">Enter Username</p>
+                        <input id="usernameRegister">
+                    </div>
+                    <div class="signin">
+                        <p class = "prompt">Enter Password</p>
+                        <input id="passwordRegister">
+                    </div>
+                    <div class="signin">
+                        <p class = "prompt">Confirm Password</p>
+                        <input id="passwordRegisterConfirm">
+                    </div>
+                    <div id="RegisterWarning">
 
+                    </div>
+                    <button id="RegisterButton">
+                        Create Account
+                    </button>
+                    <a id="CreateAccountBack">
+                        < Back </a>
                 </div>
-                <button id = "RegisterButton">
-                    Create Account
-                </button>
-                <a id="CreateAccountBack">
-                    < Back </a>
             </div>
-        </div>
 
-        <div class="sep">
+            <div class="sep">
 
-        </div>
-        <div class="instruction">
-            <div class="instructionInner">
-                <h1>
-                    Protector Game
-                </h1>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum odit dignissimos quasi, sed beatae
-                    soluta
-                    mollitia enim officiis architecto nam? Nobis debitis repellendus architecto possimus veniam odio
-                    itaque
-                    nulla corrupti.
-                </p>
-                <p>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt molestiae, architecto iure
-                    delectus
-                    esse libero commodi magnam facere cumque omnis, suscipit corrupti neque sunt sequi fugit unde modi
-                    magni
-                    tenetur!
-                </p>
+            </div>
+            <div class="instruction">
+                <div class="instructionInner">
+                    <h1>
+                        Protector Game
+                    </h1>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum odit dignissimos quasi, sed
+                        beatae
+                        soluta
+                        mollitia enim officiis architecto nam? Nobis debitis repellendus architecto possimus veniam odio
+                        itaque
+                        nulla corrupti.
+                    </p>
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt molestiae, architecto iure
+                        delectus
+                        esse libero commodi magnam facere cumque omnis, suscipit corrupti neque sunt sequi fugit unde
+                        modi
+                        magni
+                        tenetur!
+                    </p>
 
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem molestiae rem provident aliquam
-                    corporis voluptas eveniet, maxime non at in aut ab doloremque? Enim magni eveniet aperiam ipsa neque
-                    fuga?
-                </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem molestiae rem provident aliquam
+                        corporis voluptas eveniet, maxime non at in aut ab doloremque? Enim magni eveniet aperiam ipsa
+                        neque
+                        fuga?
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
+
     <!-- Loading Screen -->
     <div class="Loading">
         <div>
-            <p id = 'loading-text'>
+            <p id='loading-text'>
                 Loading...
             </p>
         </div>
     </div>
 
     <!-- Game Canvas -->
-    <div class = "mainGame">
+    <div class="mainGame">
         <canvas id="canvas">
 
         </canvas>
-        <button id = "stopGameTest">Stop game</button>
+        <button id="stopGameTest">Stop game</button>
     </div>
 
     <!-- Ranking Screen -->
-    <div class = "RankingBody">
-        <div class = "RankingContainer">
-            <div id = "ranking-head"></div>
-            <div class = "Ranking">
-                <div class = "RankingUsername">
-                    Fox Lee
-                </div>
-                <div class = "RankingPoints">
-                    123
-                </div>
-            </div>
-            <div class = "Ranking">
-                <div class = "RankingUsername">
-                    Kelvin Wu
-                </div>
-                <div class = "RankingPoints">
-                    456
-                </div>
-            </div>
+    <div class="RankingBodyBig">
+
+        <div class="title">
+            <h1>Game Over</h1>
+            <p>Mission Accomplish! Here is your ranking!</p>
         </div>
 
-        <button id = "play-again-button">
+        <div class="RankingBody">
+            <div class="RankingContainer">
+                <div id="ranking-head"></div>
+                <div class="Ranking">
+                    <div class="RankingUsername">
+                        Fox Lee
+                    </div>
+                    <div class="RankingPoints">
+                        123
+                    </div>
+                </div>
+                <div class="Ranking">
+                    <div class="RankingUsername">
+                        Kelvin Wu
+                    </div>
+                    <div class="RankingPoints">
+                        456
+                    </div>
+                </div>
+            </div>
+    
+            
+        </div>
+
+        <button id="play-again-button">
             Play Again
         </button>
     </div>
     
-
 </body>
 
 <script src="/socket.io/socket.io.min.js"></script>
@@ -157,88 +181,10 @@
 
 </script>
 
+<link rel="stylesheet" href="styles.css">
+
 <style>
-    canvas {
-        border: 3px solid black;
-    }
 
-    .homebody {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
-
-    .Loading {
-        background-color: #9e9e9e;
-        display: flex;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        display: none;
-    }
-
-    .login {
-        flex: 1;
-    }
-
-    .loginInner {
-        display: flex;
-        flex-direction: column;
-        max-width: 300px;
-        margin: auto;
-    }
-
-    .login p {
-        margin-bottom: 0;
-        margin-top: 0;
-    }
-
-    .login h2 {
-        margin-bottom: 0;
-        margin-top: 0;
-    }
-
-    .loginInnerPrompt {
-        margin-bottom: 10px;
-    }
-
-    #CreateAccountLeft {
-        display: none;
-    }
-
-    .instruction {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .instructionInner {
-        max-width: 700px;
-        margin-left: 100px;
-    }
-
-    body {
-        height: 800px;
-    }
-
-    .sep {
-        width: 3px;
-        height: 590px;
-        background-color: #9e9e9e;
-        display: block;
-        border-radius: 3px;
-    }
-
-    .signin {
-        margin-bottom: 5px;
-    }
-
-    .mainGame {
-        display: none;
-    }
 </style>
 
 </html>

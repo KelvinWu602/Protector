@@ -1,0 +1,243 @@
+html{
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-image: url("wp2082809.jpg");
+    background-repeat: no-repeat;
+}
+
+canvas {
+    border: 3px solid black;
+}
+
+.homebodyBig {
+    height: 100%;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Orbitron';
+    margin-bottom: 2vh;
+}
+
+.title h1 {
+    font-size: 75px;
+    text-shadow: 0 0 10px white;
+    margin: 0;
+}
+
+.title p {
+    font-size: 15px;
+}
+
+.homebody {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.375);
+    border-radius: 20px;
+    backdrop-filter: blur(7px);
+
+    padding: 50px 5%;
+
+    color: white;
+    font-family: "Lato";
+
+    transition: backdrop-filter 1s;
+}
+
+.homebody input{
+    background-color: rgba(255, 255, 255, 0.26);
+    width: 100%;
+    border: unset;
+    height: 35px;
+    border-radius: 3px;
+}
+
+.homebody .prompt {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.homebody button {
+    all: unset;
+
+    text-align: center;
+    height: 45px;
+
+    margin-top: 7px;
+    margin-bottom: 7px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    width: 100%;
+    background-color: rgba(255, 0, 0, 0);
+
+    transition: 0.5s;
+}
+
+.homebody a{
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.homebody button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.079);
+    transition: 0.2s;
+}
+
+.homebody:hover {
+    backdrop-filter: blur(30px);
+    transition: 1s;
+}
+
+.Loading {
+    background-color: #9e9e9e;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.login {
+    width: 450px;
+}
+
+.loginInner {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: auto;
+}
+
+.login p {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.login h2 {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.loginInnerPrompt {
+    margin-bottom: 10px;
+}
+
+#CreateAccountLeft {
+    display: none;
+}
+
+.instruction {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.instructionInner {
+    max-width: 600px;
+    min-width: 370px;
+    margin-left: 100px;
+}
+
+.sep {
+    width: 2px;
+    height: 590px;
+    background-color: #ffffff30;
+    display: block;
+    border-radius: 3px;
+}
+
+.signin {
+    margin-bottom: 5px;
+}
+
+.mainGame {
+    display: none;
+}
+
+.RankingBodyBig {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.RankingBody {
+    width: 90%;
+    max-width: 1200px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(255, 255, 255, 0.155);
+    backdrop-filter: blur(10px);
+
+    border-radius: 10px;
+
+    height: 60vh;
+
+    padding-top: 30px;
+}
+
+.Ranking {
+    background-color: rgba(255, 255, 255, 0.353);
+
+    height: 70px;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.RankingBodyBig button {
+    all: unset;
+
+    text-align: center;
+    height: 45px;
+
+    margin-top: 7px;
+    margin-bottom: 7px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    width: 300px;
+    font-family: 'Lato';
+    color: white;
+    background-color: rgba(255, 0, 0, 0);
+
+    transition: 0.5s;
+}
+
+@media screen and (max-width: 700px) {
+    .RankingBody {
+        width: 100%;
+    }
+  }
