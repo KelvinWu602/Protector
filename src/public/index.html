@@ -103,65 +103,7 @@
 <script src="socket.js"></script>
 <script src="doGame.js"></script>
 
-<script>
-    let userName = "";
-    let userPassword = "";
-
-    document.getElementById("usernameInput").addEventListener("input", (e) => {
-        userName = e.target.value;
-    })
-
-    document.getElementById("passwordInput").addEventListener("input", (e) => {
-        userPassword = e.target.value;
-    })
-
-    document.getElementById("CreateAccount").onclick = () => {
-        document.querySelector("#SignInLeft").style.display = "none";
-        document.querySelector("#CreateAccountLeft").style.display = "block";
-    }
-
-    document.getElementById("CreateAccountBack").onclick = () => {
-        document.querySelector("#SignInLeft").style.display = "block";
-        document.querySelector("#CreateAccountLeft").style.display = "none";
-    }
-
-    // Handling Login
-    document.getElementById("LoginButton").onclick = () => {
-        console.log(userName);
-        console.log(userPassword);
-
-        //Loading
-        showLoadingScreen();
-
-        sendData();
-    }
-
-    //Dummy function, dont know how to implement yet
-    async function sendData() {
-        await new Promise(function (resolve) {
-            setTimeout(() => resolve("done!"), 500);
-        });
-
-        gameStart();
-    }
-
-    function showLoadingScreen() {
-        document.querySelector(".homebody").style.display = "none";
-        document.querySelector(".Loading").style.display = "flex";
-    }
-
-    function removeLoadingScreen() {
-        document.querySelector(".homebody").style.display = "flex";
-        document.querySelector(".Loading").style.display = "none";
-    }
-
-    function gameStart() {
-        document.querySelector(".Loading").style.display = "none";
-        document.querySelector("canvas").style.display = "block";
-    }
-
-    removeLoadingScreen();
-</script>
+<script src="login.js"></script>
 
 <style>
     .homebody {

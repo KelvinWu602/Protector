@@ -167,7 +167,11 @@ const doGame = function() {
         window.requestAnimationFrame(draw);
     }
 
-    return {draw}
+    function start(){
+        console.log("STARTS");
+    }
+
+    return {draw, start}
 }();
 
 doGame.draw(); 
