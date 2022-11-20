@@ -21,7 +21,7 @@ const loading = function(){
             setTimeout(() => resolve("done!"), 500);
         });
 
-        doGame.startGame(); 
+        mainGame.startGame(); 
     }
 
     return{show, hide, changeText, playerMatch}

@@ -1,4 +1,4 @@
-const doGame = function() {
+const mainGame = function() {
     let i = 0.01;
 
     let canvas_height = 500;
@@ -106,7 +106,7 @@ const doGame = function() {
     function startGame(){
         //Remove Loading Screen
         loading.hide(); 
-        document.querySelector(".mainGame").style.display = "block";
+        show();
 
         gameIsGoing = true; 
 
@@ -116,8 +116,22 @@ const doGame = function() {
 
     function stopGame(){
         gameIsGoing = false; 
-        document.querySelector(".mainGame").style.display = "none";
+        hide();
         ranking.showRanking();
+    }
+
+    function show(){
+        document.querySelector(".mainGame").style.display = "block";
+
+        let windowWidth = document.documentElement.clientWidth;
+        let windowHeight = document.documentElement.clientHeight; 
+
+        document.querySelector("canvas").width = windowWidth - 40;
+        document.querySelector("canvas").height = windowHeight - 40;
+    }
+
+    function hide(){
+        document.querySelector(".mainGame").style.display = "none";
     }
     
     function drawRect(x_pos, y_pos, width, height, color) {

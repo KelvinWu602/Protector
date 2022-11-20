@@ -18,7 +18,7 @@ const Socket = (function() {
          * When the player is matched up and the game is ready
          */
         socket.on("startsame", () => {
-            doGame.startGame(); 
+            mainGame.startGame(); 
         });
 
         /**
@@ -34,7 +34,7 @@ const Socket = (function() {
          * ===========================================
          */
         socket.on("updateload", () => {
-            doGame.startGame(); 
+            mainGame.startGame(); 
         });
 
         
