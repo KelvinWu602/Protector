@@ -118,6 +118,13 @@
         </div>
     </div>
 
+    <!-- Game Mode Selection Screen-->
+    <div class="GameModeSelection">
+        <button id="PVP_btn">PVP</button>
+        <button id="COOP_attacker_btn">COOP (attacker)</button>
+        <button id="COOP_dodger_btn">COOP (dodger)</button>
+    </div>
+
     <!-- Game Canvas -->
     <div class="mainGame">
         <canvas id="canvas">
@@ -169,8 +176,10 @@
 
 <script src="loading.js"></script>
 <script src="socket.js"></script>
-<script src="mainGame.js"></script>
-
+<script src="pvpGame.js"></script>
+<!-- @TODO complete the coopGame.js -->
+<!--<script src="coopGame.js"></script>-->
+<script src="gamemode.js"></script>
 <script src="login.js"></script>
 <script src="ranking.js"></script>
 
@@ -178,7 +187,7 @@
 <script>
     //The eqivalent of the jquery document ready
     ranking.init();
-
+    loading.hide();
 </script>
 
 <link rel="stylesheet" href="styles.css">

@@ -11,62 +11,106 @@ const Socket = (function() {
         return socket;
     };
 
-    const connect = function() {
+    const connect = function(mainGame,username) {
+        console.log("socket connect...");
+
         socket = io();
 
         /**
          * When the player is matched up and the game is ready
+         * the server will send the "server's canvas" dimension to the client
          */
-        socket.on("startsame", () => {
-            mainGame.startGame(); 
+        socket.on("startGame", (message) => {
+            console.log("received startGame event");
+            const {canvasWidth, canvasHeight} = JSON.parse(message);
+            mainGame.startGame(username,canvasWidth,canvasHeight); 
         });
 
-        /**
-         * ===========================================
-         * TODO: Add a new socket connection in the backend
-         * 
-         * This TODO is optional, but if you would want the player to know something during the loading
-         * Example: Currently matching you up with another person
-         * Use this function to update the loading screen text
-         * 
-         * If the screen is not currently being shown, nothing will happen
-         * 
-         * When finished changing the backend, just delete this TODO. Nothing to do here. 
-         * ===========================================
-         */
-        socket.on("updateload", () => {
-            mainGame.startGame(); 
-        });
-
+    
         /**
          * ===========================================
          * TODO: Send a socket message of "update"
          * 
-         * Data expected is a Array of the following object. 
-         * If only one object, still wrap in an array
+         * Data expected depends on the game mode.
          * 
-         * {
-         *  username: string; 
-         *  role: "Attacker" | "Dodger";    //Feel free to add more role here
-         *  position: {
-         *      x: number; 
-         *      y: number;
-         *  };
-         *  size: {
-         *      x: number;
-         *      y: number;
-         *  }
+         * For PVP:
+         * Each player has a pair of attacker and dodger, ie, 4 objects in total
+         * 
+         * const gamestate = {
+         *    gameover,               //boolean: true if game is over
+         *    winner,                 //string: username of winner, undefined if the game is not over   
+         *    player: [
+         *      {
+         *          username,                 //string: username of player 1
+         *          attacker: {x,y,w,h}       //rectangle: attacker's position
+         *          dodger: {x,y,w,h}         //rectangle: dodger's position
+         *      },
+         *      {
+         *          username,                 //string: username of player 2
+         *          attacker: {x,y,w,h}       //rectangle: attacker's position
+         *          dodger: {x,y,w,h}         //rectangle: dodger's position
+         *      }  
+         *    ]
          * }
+         * 
+         * For COOP:
+         * Each player controls either attacker or dodger, plus 5 AI enemies, ie, 7 objects in total
+         * 
+         * const gamestate = {
+         *    gameover,               //boolean: true if game is over
+         *    point,                  //int: number of enemies they have killed 
+         *    player: {
+         *          attacker: {
+         *              username,     //string: username of player 1
+         *              x,            //int: x position of attacker
+         *              y,            //int: y position of attacker
+         *              w,            //int: width of attacker
+         *              h             //int: height of attacker
+         *          }       
+         *          dodger: {
+         *              username,     //similar as above
+         *              x,
+         *              y,
+         *              w,
+         *              h
+         *          }         
+         *    }
+         * }
+         * 
          * 
          * The canvas will loop through this array and draw every object
          * ===========================================
          */
-        socket.on("update", (pos)=> {
-            let position = JSON.parse(pos);
-            mainGame.update(pos);
+        socket.on("update", (state)=> {
+            let newstate = JSON.parse(state);
+            // console.log("update: " + state);
+            mainGame.update(newstate);
+        });
+    
+        /**
+         * When the game is over, the server will emit the gameover event AFTER sending the last update event with gamestate.gameover==true
+         * @param stats users_data.json
+         * 
+         * 
+         * stats = {
+         *    username: {
+         *      pvp: {
+         *         win,     //int: total number of wins in pvp
+         *         lose     //int: total number of loses in pvp
+         *      },
+         *      coop: {  
+         *          highest_point,     //int: highest point in coop mode
+         *      }
+         *    }
+         * }
+         * 
+         * 
+         * 
+         */
+        socket.on("gameover",(stats)=>{
+            stats = JSON.parse(stats);
+            mainGame.stopGame(stats);
         })
-        
-
     };
 
     // This function disconnects the socket from the server
@@ -75,19 +119,21 @@ const Socket = (function() {
         socket = null;
     };
 
-    // This function sends a post message event to the server
-    const postMessage = function(content) {
-        if (socket && socket.connected) {
-            socket.emit("post message", content);
-        }
-    };
-
     const postInput = (input) => {
-        console.log("Socket: " + input);
+        console.log("Socket: " + JSON.stringify(input));
         if (socket && socket.connected) {
-            socket.emit("input", input);
+            socket.emit("input", JSON.stringify(input));
         }
     }
 
-    return { getSocket, connect, disconnect, postMessage, postInput };
-})();
+    // // This function sends a post message event to the server
+    // const postMessage = function(content) {
+    //     if (socket && socket.connected) {
+    //         socket.emit("post message", content);
+    //     }
+    // };
+
+    
+
+    return { getSocket, connect, disconnect, postInput };
+}());

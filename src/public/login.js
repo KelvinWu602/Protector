@@ -2,12 +2,16 @@ const Login = function () {
 
     //Forgive me for doing it the react way
 
+    //Input field caches
     let userName = "";
     let userPassword = "";
 
     let registerUserName = "";
     let registerPassword = "";
     let registerPasswordConfirm = "";
+
+    //Login information, record the username if logged in, can be read by other modules 
+    let username_logged_in = "";
 
     function init() {
         /**
@@ -19,7 +23,7 @@ const Login = function () {
         //Username Listener
         document.getElementById("usernameInput").addEventListener("input", (e) => {
             userName = e.target.value;
-            //console.log(userName)
+            console.log(userName)
         })
 
         //Password Listener
@@ -29,6 +33,7 @@ const Login = function () {
 
         // Handling Login
         document.getElementById("LoginButton").onclick = () => {
+            console.log("setup login onclick event");
             doSignin();
         }
 
@@ -40,8 +45,9 @@ const Login = function () {
          * ==========================================
          */
 
-        document.getElementById("usernameInput").addEventListener("input", (e) => {
+        document.getElementById("usernameRegister").addEventListener("input", (e) => {
             registerUserName = e.target.value;
+            console.log(registerUserName);
         })
 
         document.getElementById("passwordRegister").addEventListener("input", (e) => {
@@ -53,7 +59,7 @@ const Login = function () {
         })
 
         document.getElementById("RegisterButton").onclick = () => {
-            console.log("dsjakhlbjfdv")
+            console.log("setup register onclick event")
             doRegister();
         }
 
@@ -76,23 +82,57 @@ const Login = function () {
             document.querySelector("#CreateAccountLeft").style.display = "none";
         }
 
+        doValidate();
     }
+
+    /**
+     * Function called when the website finished loading
+     * Sends an AJAX request to express server
+     */
+    async function doValidate() {
+        
+
+        /**
+         * ===========================================
+         * TODO: 
+         * Start the server and check that this fetch is done correctly. 
+         * (i.e. Check datatype etc...)
+         * 
+         * Also make sure the return error message is good cuz I'll render that message directly
+         * 
+         * When ready, uncomment the fetch and comment all code below this line
+         * ===========================================
+         */
+        await fetch("/validate")
+        .then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                console.log("Logged in last time, auto signed in");
+                username_logged_in = userName;
+                console.log("logged in as: " + username_logged_in);
+                //hide the login page
+                hide();
+                //show the game mode selection screen
+                GameMode.show(username_logged_in);
+            } 
+        })
+    }
+
 
     /**
      * Function called when user press "Sign In" button
      * Sends an AJAX request to express server
      */
     async function doSignin() {
-
-        hide(); 
-        loading.show();
         
-        let signin = {
+        let signin = JSON.stringify({
             username: userName,
             password: userPassword, 
-        }
+        });
+        console.log("Sign in: " + signin);
 
-        loading.changeText("Processing your signin request");
+        // loading.changeText("Processing your signin request");
 
         /**
          * ===========================================
@@ -105,50 +145,46 @@ const Login = function () {
          * When ready, uncomment the fetch and comment all code below this line
          * ===========================================
          */
+        await fetch("/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: signin
+        }).then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                username_logged_in = userName;
+                console.log("logged in as: " + username_logged_in);
+                hide(); 
+                GameMode.show(username_logged_in);
+            } else if(json.status == "error"){
+                showWarning("signin", json.error);
+            }
+        }).catch((err) => {
+            console.log("Error on Signin Ajax");
+            showWarning("signin", "An unknown error occured")
+        })
 
-        // await fetch("/signin", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: signin
-        // }).then((res) => {
-        //     return(res.json())
-        // }).then((json) => {
-        //     if (json.status == "success") {
-        //         gameStart();
-        //     } else if(json.status == "error"){
-        //         showWarning("signin", json.error);
-        //     }
-        // }).catch((err) => {
-        //     console.log("Error on Signin Ajax");
-        //     showWarning("signin", "An unknown error occured")
-        // })
-
-        //Dummy delay, delete later
-        await new Promise(function (resolve) {
-            setTimeout(() => resolve("done!"), 500);
-        });
-
-        loading.playerMatch();
     }
 
     /**
      * Function called when user press "Register" button
      * Sends an AJAX request to express server
      */
-    async function doRegister(){
-        console.log("Do register");
-        
+    async function doRegister(){        
         if(registerPassword != registerPasswordConfirm){
             this.showWarning("register", "The two passwords does not match!");
             return;
         }
 
-        let register = {
+        let register = JSON.stringify({
             username: registerUserName,
             password: registerPassword, 
-        }
+        });
+
+        console.log("Register: " + register);
 
         /**
          * ===========================================
@@ -161,30 +197,30 @@ const Login = function () {
          * When ready, uncomment the fetch and comment all code below this line
          * ===========================================
          */
-        // fetch("/register", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: register
-        // }).then((res) => {
-        //     return(res.json())
-        // }).then((json) => {
-        //     if (json.status == "success") {
-        //         //Bad implementation. Improve later.
-        //         showWarning("register", "Creation Successful, please signin now");
-        //     } else if(json.status == "error"){
-        //         showWarning("register", json.error);
-        //     }
-        // }).catch((err) => {
-        //     console.log("Error on register Ajax");
-        //     showWarning("register", "An unknown error occured")
-        // })
+        fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: register
+        }).then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                //Bad implementation. Improve later.
+                showWarning("register", "Creation Successful, please signin now");
+            } else if(json.status == "error"){
+                showWarning("register", json.error);
+            }
+        }).catch((err) => {
+            console.log("Error on register Ajax");
+            showWarning("register", "An unknown error occured")
+        })
 
-        //Dummy delay, delete later
-        await new Promise(function (resolve) {
-            setTimeout(() => resolve("done!"), 500);
-        });
+        // //Dummy delay, delete later
+        // await new Promise(function (resolve) {
+        //     setTimeout(() => resolve("done!"), 500);
+        // });
 
         showWarning("register", "Creation Successful, please signin now");
     }
@@ -201,9 +237,6 @@ const Login = function () {
 
     init();
 
-    function removeLoadingScreen() {
-    }
-
     function show() {
         document.querySelector(".homebody").style.display = "flex";
     }
@@ -213,13 +246,10 @@ const Login = function () {
         document.querySelector(".homebodyBig").style.display = "none";
     }
 
-    function gameStart() {
-        loading.hide(); 
-        document.querySelector("canvas").style.display = "block";
+    function getLoggedInUser() {
+        return username_logged_in;
     }
 
-    removeLoadingScreen();
-
-    return{hide}
+    return{hide,getLoggedInUser}
 
 }()

@@ -1,5 +1,6 @@
 const {MOVESTATE, Attacker, Dodger} = require('./player.js');
 const {Enemy} = require('./enemy.js');
+const fs = require("fs");
 
 const FPS = 30;
 
@@ -80,7 +81,8 @@ const PVP = function(ID){
         let gameTimer = setInterval(()=>{
             if(gamestate.gameover) {
                 clearInterval(gameTimer);
-                //call gameover function
+                //call gameOver function
+                gameOver(sockets);
                 return;
             }
             update(sockets);
@@ -88,6 +90,7 @@ const PVP = function(ID){
             frames++;
             if(frames%(20*FPS)==0){
                 gamestate.speed += 5;
+                console.log("20 secs");
             }
         },1000/FPS);
     }
@@ -169,7 +172,7 @@ const PVP = function(ID){
         .collideWith(gamestate.player[1].attacker.obj.getPlayer().getEdge()))
         {
             gamestate.gameover = true;
-            winner = players[1];
+            gamestate.winner = players[1];
             gamestate.player[0].dodger.obj.died();
         }
 
@@ -177,9 +180,27 @@ const PVP = function(ID){
         .collideWith(gamestate.player[0].attacker.obj.getPlayer().getEdge()))
         {
             gamestate.gameover = true;
-            winner = players[0];
+            gamestate.winner = players[0];
             gamestate.player[1].dodger.obj.died();
         }
+    }
+
+    const gameOver = (sockets)=>{
+        //update users_data.json
+        const users_data = JSON.parse(fs.readFileSync('data/users_data.json'));
+        if(gamestate.winner == players[0]){
+            users_data[players[0]].pvp.win ++;
+            users_data[players[1]].pvp.lose ++;
+        }else{
+            users_data[players[0]].pvp.lose ++;
+            users_data[players[1]].pvp.win ++;
+        }
+        fs.writeFileSync('data/users_data.json',JSON.stringify(users_data,null,"    "));
+        console.log(ID + " is over and read users_data is updated");
+
+        //send gameover to the client
+        sockets[players[0]].emit('gameover',JSON.stringify(users_data));
+        sockets[players[1]].emit('gameover',JSON.stringify(users_data));
     }
 
     const getID = ()=>{
@@ -228,7 +249,7 @@ const COOP = function(ID){
         //delete the player
         players.splice(players.indexOf(playerID),1);
         //terminate the game if there is only one player left
-        gameover = true;
+        gamestate.gameover = true;
     }
 
     const getPlayersID = ()=>{
@@ -260,6 +281,7 @@ const COOP = function(ID){
             if(gamestate.gameover) {
                 clearInterval(gameTimer);
                 //call gameover function
+                gameOver(sockets);
                 return;
             }
             update(sockets);
@@ -339,6 +361,22 @@ const COOP = function(ID){
         //send the game state to the client
         sockets[players[0]].emit('update',JSON.stringify(gamestateToSend));
         sockets[players[1]].emit('update',JSON.stringify(gamestateToSend));
+    }
+
+    const gameOver = (sockets)=>{
+        //update users_data.json
+        const users_data = JSON.parse(fs.readFileSync('data/users_data.json'));
+        for(let i = 0 ; i < 2 ; i++){
+            if(users_data[players[i]].coop.highest_point < gamestate.point){
+                users_data[players[i]].coop.highest_point = gamestate.point;
+            }
+        }
+        fs.writeFileSync('data/users_data.json',JSON.stringify(users_data,null,"    "));
+        console.log(ID + " is over and read users_data is updated");
+
+        //send gameover to the client
+        sockets[players[0]].emit('gameover',JSON.stringify(users_data));
+        sockets[players[1]].emit('gameover',JSON.stringify(users_data));
     }
 
     const getID = ()=>{
