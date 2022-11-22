@@ -64,10 +64,10 @@ const ranking = function () {
                 </div>
                 <div class="RankingPoints">
                     <div>
-                        Wins: ${winner_pvp_stats.pvp.win}
+                        Wins: ${winner_pvp_stats.win}
                     </div>
                     <div>
-                        Lose: ${winner_pvp_stats.pvp.lose}
+                        Lose: ${winner_pvp_stats.lose}
                     </div>
                 </div>
             </div>
@@ -83,10 +83,10 @@ const ranking = function () {
                 </div>
                 <div class="RankingPoints">
                     <div>
-                        Wins: ${loser_pvp_stats.pvp.win}
+                        Wins: ${loser_pvp_stats.win}
                     </div>
                     <div>
-                        Lose: ${loser_pvp_stats.pvp.lose}
+                        Lose: ${loser_pvp_stats.lose}
                     </div>
                 </div>
             </div>

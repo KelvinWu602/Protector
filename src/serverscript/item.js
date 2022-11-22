@@ -1,9 +1,10 @@
+const {Box} = require('./box.js');
 // x, y : location of the item
 // duration: how long the item will last in ms
 module.exports.Item = function(type,w,h,duration,rebornInterval) {
-    const edge = Box(x,y,w,h);
     let x = Math.floor(Math.random()*1200); //canvas width
     let y = Math.floor(Math.random()*800);  //canvas height
+    const edge = Box(x,y,w,h);
     let birthtime = Date.now();
     
     //expired=true means: 

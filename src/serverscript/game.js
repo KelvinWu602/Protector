@@ -139,8 +139,8 @@ const PVP = function(ID){
             //check if collected
             for(let i = 0 ; i < players.length ; i++){
                 let playeri = gamestate.player[i];
-                HPItem.checkCollect(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
-                HPItem.checkCollect(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+                HPItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+                HPItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
             }
         }
 
@@ -151,8 +151,8 @@ const PVP = function(ID){
             //check if collected
             for(let i = 0 ; i < players.length ; i++){
                 let playeri = gamestate.player[i];
-                shieldItem.checkCollect(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
-                shieldItem.checkCollect(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+                shieldItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+                shieldItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
             }
         }
 
@@ -172,8 +172,8 @@ const PVP = function(ID){
             player: [
                 { 
                     username:players[0],
-                    life: gamestate.player[0].dodger.obj.getPlayer().getLife(),
-                    shielded: gamestate.player[0].dodger.obj.getPlayer().getShielded(),
+                    life: gamestate.player[0].dodger.obj.getLife(),
+                    shielded: gamestate.player[0].dodger.obj.getShielded(),
                     attacker : {
                         ...attackedge0.getXY(),
                         ...attackedge0.getWH()
@@ -185,8 +185,8 @@ const PVP = function(ID){
                 },
                 {
                     username:players[1],
-                    life: gamestate.player[1].dodger.obj.getPlayer().getLife(),
-                    shielded: gamestate.player[1].dodger.obj.getPlayer().getShielded(),
+                    life: gamestate.player[1].dodger.obj.getLife(),
+                    shielded: gamestate.player[1].dodger.obj.getShielded(),
                     attacker : {
                         ...attackedge1.getXY(),
                         ...attackedge1.getWH()
@@ -383,8 +383,8 @@ const COOP = function(ID){
             //check if expired
             HPItem.update();
             //check if collected
-            HPItem.checkCollect(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
-            HPItem.checkCollect(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+            HPItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+            HPItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
         }
 
         //update shield item
@@ -392,8 +392,8 @@ const COOP = function(ID){
             //check if expired
             shieldItem.update();
             //check if collected
-            shieldItem.checkCollect(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
-            shieldItem.checkCollect(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+            shieldItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+            shieldItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
         }
 
         //update enemies position

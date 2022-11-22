@@ -226,12 +226,12 @@ const Login = function () {
             showWarning("register", "An unknown error occured")
         })
 
-        //Dummy delay, delete later
-        await new Promise(function (resolve) {
-            setTimeout(() => resolve("done!"), 500);
-        });
+        // //Dummy delay, delete later
+        // await new Promise(function (resolve) {
+        //     setTimeout(() => resolve("done!"), 500);
+        // });
 
-        showWarning("register", "Creation Successful, please signin now");
+        // showWarning("register", "Creation Successful, please signin now");
     }
 
     function showWarning(place, text){
