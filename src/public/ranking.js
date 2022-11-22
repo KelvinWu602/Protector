@@ -2,7 +2,7 @@
 
 const ranking = function () {
 
-    const init = function(){
+    const init = function () {
         document.querySelector(".RankingBodyBig").style.display = "none";
         document.querySelector("#play-again-button").onclick = backToGameMode;
     }
@@ -13,10 +13,11 @@ const ranking = function () {
      * @param gamestate     gamestate object from server "update" event, see socket.js for details
      * @param gamemode      "pvp" or "coop"
      */
-    const showRanking = function(stat, gamestate, gamemode){
+    const showRanking = function (stat, gamestate, gamemode) {
         document.querySelector(".RankingBodyBig").style.display = "flex";
 
-        let html = "";
+        let winner_html = "";
+        let loser_html = "";
 
         //Assuming that the user data looks like this, correct me if wrong
         // "fox": {
@@ -39,7 +40,7 @@ const ranking = function () {
         // },
 
         //Depends on the gamemode, show different info
-        if(gamemode == "pvp"){
+        if (gamemode == "pvp") {
             // Show the info for this game
             // Winner's username
             // Winner's pvp stats {win, lose}
@@ -53,10 +54,46 @@ const ranking = function () {
             /**
              * @TODO Construct the html contents
              */
-            html = "";
+            winner_html = `
+            <div class="Ranking winner">
+                <h1>
+                    Winner
+                </h1>
+                <div class="RankingUsername">
+                    ${gamestate.winner}
+                </div>
+                <div class="RankingPoints">
+                    <div>
+                        Wins: ${winner_pvp_stats.pvp.win}
+                    </div>
+                    <div>
+                        Lose: ${winner_pvp_stats.pvp.lose}
+                    </div>
+                </div>
+            </div>
+            `
 
-        }else if(gamemode == "coop"){
-            //Show the info for this game
+            loser_html = `
+            <div class="Ranking loser">
+                <h1>
+                    Loser
+                </h1>
+                <div class="RankingUsername">
+                    ${gamestate.loser}
+                </div>
+                <div class="RankingPoints">
+                    <div>
+                        Wins: ${loser_pvp_stats.pvp.win}
+                    </div>
+                    <div>
+                        Lose: ${loser_pvp_stats.pvp.lose}
+                    </div>
+                </div>
+            </div>
+            `
+
+        } else if (gamemode == "coop") {
+            // Show the info for this game
             // Attacker's username and highest_point
             // Dodger's username and highest_point
             const attacker = gamestate.player.attacker.username;
@@ -67,43 +104,99 @@ const ranking = function () {
 
             /**
              * @TODO Construct the html contents
+             * COMPLETED: Comment lines below when ready
              */
-            html = "";
+            //In Coop, there is no "winner" or "loser"
+            //But still render winner_html and loser_html just to maintain order
+            winner_html = `
+             <div class="Ranking">
+                 <h1>
+                     Attacker
+                 </h1>
+                 <div class="RankingUsername">
+                     ${attacker}
+                 </div>
+                 <div class="RankingPoints">
+                     <div>
+                         High Score: ${attacker_highest_point}
+                     </div>
+                 </div>
+             </div>
+             `
+
+            loser_html = `
+             <div class="Ranking">
+                 <h1>
+                     Loser
+                 </h1>
+                 <div class="RankingUsername">
+                     ${dodger}
+                 </div>
+                 <div class="RankingPoints">
+                     <div>
+                        High Score: ${dodger_highest_point}
+                     </div>
+                 </div>
+             </div>
+             `
         }
 
-        //Delete after filling above
-        html = `
-        <div class = "Ranking">
-            <div class = "RankingUsername">
-                Fox Lee
+        //=========================
+        //COMMENT ALL LINES BELOW WHEN READY FOR TESTING
+        //=========================
+        winner_html = `
+        <div class="Ranking winner">
+            <h1>
+                Winner
+            </h1>
+            <div class="RankingUsername">
+                Saber Athena
             </div>
-            <div class = "RankingPoints">
-                123
-            </div>
-        </div>
-        <div class = "Ranking">
-            <div class = "RankingUsername">
-                Kelvin Wu
-            </div>
-            <div class = "RankingPoints">
-                456
+            <div class="RankingPoints">
+                <div>
+                    Wins: 23
+                </div>
+                <div>
+                    Lose: 21
+                </div>
             </div>
         </div>
         `
 
-        html = "";
+        loser_html = `
+        <div class="Ranking loser">
+            <h1>
+                Loser
+            </h1>
+            <div class="RankingUsername">
+                Cherno Alpha
+            </div>
+            <div class="RankingPoints">
+                <div>
+                    Wins: 23
+                </div>
+                <div>
+                    Lose: 21
+                </div>
+            </div>
+        </div>
+        `
+        //=========================
+        //COMMENT ALL LINES ABOVE WHEN READY FOR TESTING
+        //=========================
 
-        document.getElementById("ranking-head").insertAdjacentHTML("afterend", html); 
+        document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+        document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
     }
 
     //Should return to GameMode screen allow player to choose gamemode again
-    const backToGameMode = function(){
-        document.querySelector(".RankingBody").style.display = "none";
+    const backToGameMode = function () {
+        document.querySelector(".RankingBodyBig").style.display = "none";
         Socket.disconnect();
         GameMode.show(GameMode.getLoggedInUser());
     }
 
     init();
 
-    return{init , showRanking}
+    return { init, showRanking }
 }()
