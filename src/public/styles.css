@@ -110,12 +110,19 @@ canvas {
 }
 
 .Loading {
-    background-color: #9e9e9e;
     display: flex;
     height: 100%;
     align-items: center;
     justify-content: center;
     display: none;
+
+    backdrop-filter: blur(30px);
+}
+
+.Loading p {
+    font-family: 'Lato';
+    color: white;
+    font-size: 30px;
 }
 
 .login {
