@@ -1,9 +1,9 @@
-const { Socket } = require("socket.io");
+//const { Socket } = require("socket.io");
 
 const ranking = function () {
 
     const init = function(){
-        document.querySelector(".RankingBody").style.display = "none";
+        document.querySelector(".RankingBodyBig").style.display = "none";
         document.querySelector("#play-again-button").onclick = backToGameMode;
     }
 
@@ -14,13 +14,33 @@ const ranking = function () {
      * @param gamemode      "pvp" or "coop"
      */
     const showRanking = function(stat, gamestate, gamemode){
-        document.querySelector(".RankingBody").style.display = "block";
+        document.querySelector(".RankingBodyBig").style.display = "flex";
 
         let html = "";
 
+        //Assuming that the user data looks like this, correct me if wrong
+        // "fox": {
+        //     "pvp": {
+        //         "win": 3,
+        //         "lose": 2
+        //     },
+        //     "coop": {
+        //         "highest_point": 0
+        //     }
+        // },
+        // "Saber": {
+        //     "pvp": {
+        //         "win": 0,
+        //         "lose": 0
+        //     },
+        //     "coop": {
+        //         "highest_point": 0
+        //     }
+        // },
+
         //Depends on the gamemode, show different info
         if(gamemode == "pvp"){
-            //Show the info for this game
+            // Show the info for this game
             // Winner's username
             // Winner's pvp stats {win, lose}
             // Loser's pvp stats {win, lose}
@@ -70,6 +90,8 @@ const ranking = function () {
             </div>
         </div>
         `
+
+        html = "";
 
         document.getElementById("ranking-head").insertAdjacentHTML("afterend", html); 
     }

@@ -19,6 +19,11 @@ const GameMode = function () {
             console.log("Join COOP game as dodger!");
             joinGame("/dodger");
         }
+
+        document.getElementById("end-game").onclick = () => {
+            loading.hide();
+            ranking.showRanking();
+        }
     }
 
     function hide() { 

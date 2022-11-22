@@ -16,5 +16,23 @@
         "coop": {
             "highest_point": 0
         }
+    },
+    "Saber": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
+        }
+    },
+    "John": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
+        }
     }
 }

@@ -123,6 +123,7 @@
         <button id="PVP_btn">PVP</button>
         <button id="COOP_attacker_btn">COOP (attacker)</button>
         <button id="COOP_dodger_btn">COOP (dodger)</button>
+        <button id="end-game">END</button>
     </div>
 
     <!-- Game Canvas -->
@@ -142,25 +143,39 @@
         </div>
 
         <div class="RankingBody">
-            <div class="RankingContainer">
-                <div id="ranking-head"></div>
                 <div class="Ranking">
+                    <h1>
+                        Winner
+                    </h1>
                     <div class="RankingUsername">
                         Fox Lee
                     </div>
                     <div class="RankingPoints">
-                        123
+                        <div>
+                            Wins: 10
+                        </div>
+                        <div>
+                            Lose: 10
+                        </div>
                     </div>
                 </div>
                 <div class="Ranking">
+                    <h1>
+                        Winner
+                    </h1>
                     <div class="RankingUsername">
-                        Kelvin Wu
+                        Fox Lee
                     </div>
                     <div class="RankingPoints">
-                        456
+                        <div>
+                            Wins: 10
+                        </div>
+                        <div>
+                            Lose: 10
+                        </div>
                     </div>
                 </div>
-            </div>
+
     
             
         </div>
@@ -179,15 +194,20 @@
 <script src="pvpGame.js"></script>
 <!-- @TODO complete the coopGame.js -->
 <!--<script src="coopGame.js"></script>-->
-<script src="gamemode.js"></script>
+
 <script src="login.js"></script>
 <script src="ranking.js"></script>
+<script src="gamemode.js"></script>
 
 
 <script>
     //The eqivalent of the jquery document ready
     ranking.init();
     loading.hide();
+
+    Login.hide();
+
+    ranking.showRanking();
 </script>
 
 <link rel="stylesheet" href="styles.css">
