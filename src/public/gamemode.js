@@ -21,6 +21,7 @@ const GameMode = function () {
         }
 
         document.getElementById("end-game").onclick = () => {
+            hide();
             loading.hide();
             ranking.showRanking();
         }
@@ -32,7 +33,7 @@ const GameMode = function () {
 
     function show(username) {
         username_logged_in = username;    
-        document.querySelector(".GameModeSelection").style.display = "block";
+        document.querySelector(".GameModeSelection").style.display = "flex";
     }
 
     function getLoggedInUser() {

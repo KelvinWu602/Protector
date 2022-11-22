@@ -24,11 +24,11 @@
                         <p>Login here to play the game</p>
                     </div>
                     <div class="signin">
-                        <p class = "prompt">Username</p>
+                        <p class="prompt">Username</p>
                         <input id="usernameInput">
                     </div>
                     <div class="signin">
-                        <p class = "prompt">Password</p>
+                        <p class="prompt">Password</p>
                         <input id="passwordInput">
                     </div>
                     <div id="SignInWarning">
@@ -50,15 +50,15 @@
                         <p>Create an account to play the game</p>
                     </div>
                     <div class="signin">
-                        <p class = "prompt">Enter Username</p>
+                        <p class="prompt">Enter Username</p>
                         <input id="usernameRegister">
                     </div>
                     <div class="signin">
-                        <p class = "prompt">Enter Password</p>
+                        <p class="prompt">Enter Password</p>
                         <input id="passwordRegister">
                     </div>
                     <div class="signin">
-                        <p class = "prompt">Confirm Password</p>
+                        <p class="prompt">Confirm Password</p>
                         <input id="passwordRegisterConfirm">
                     </div>
                     <div id="RegisterWarning">
@@ -120,11 +120,61 @@
 
     <!-- Game Mode Selection Screen-->
     <div class="GameModeSelection">
-        <button id="PVP_btn">PVP</button>
-        <button id="COOP_attacker_btn">COOP (attacker)</button>
-        <button id="COOP_dodger_btn">COOP (dodger)</button>
-        <button id="end-game">END</button>
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    COOP - Attacker
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Do not go gentle into that good night,
+                    Old age should burn and rave at close of day;
+                    Rage, rage against the dying of the light.
+                </p>
+            </div>
+            <button class="GamemodeButton" id="COOP_attacker_btn">
+                PLAY
+            </button>
+        </div>
+
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    COOP - Dodger
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Though wise men at their end know dark is right,
+                    Because their words had forked no lightning they
+                    Do not go gentle into that good night.
+                </p>
+            </div>
+            
+            <button class="GamemodeButton" id = "COOP_dodger_btn">
+                PLAY
+            </button>
+        </div>
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    PVP
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Good men, the last wave by, crying how bright
+                    Their frail deeds might have danced in a green bay,
+                    Rage, rage against the dying of the light.
+                </p>
+            </div>
+            <button class="GamemodeButton" id="PVP_btn">
+                PLAY
+            </button>
+        </div>
+
+
     </div>
+
+    <button id="end-game">END</button>
 
     <!-- Game Canvas -->
     <div class="mainGame">
@@ -143,15 +193,15 @@
         </div>
 
         <div class="RankingBody">
-                <div id = "ranking-head"></div>
-                
+            <div id="ranking-head"></div>
+
         </div>
 
         <button id="play-again-button">
             Play Again
         </button>
     </div>
-    
+
 </body>
 
 <script src="/socket.io/socket.io.min.js"></script>
@@ -171,8 +221,6 @@
     //The eqivalent of the jquery document ready
     ranking.init();
     loading.hide();
-
-    //Login.hide();
 
     //ranking.showRanking();
 </script>
