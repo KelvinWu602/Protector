@@ -50,6 +50,18 @@ const Socket = (function() {
          *          attacker: {x,y,w,h}       //rectangle: attacker's position
          *          dodger: {x,y,w,h}         //rectangle: dodger's position
          *      }  
+         *    ],
+         *    HPItem: [
+         *      {
+         *          render,                   //boolean: only render this item if render == true
+         *          x,y,w,h                   //rectangle: item's position
+         *      }, ... (can contains multiple items)
+         *    ],
+         *    shieldItem: [
+         *      {
+         *          render,                   //boolean: only render this item if render == true
+         *          x,y,w,h                   //rectangle: item's position
+         *      }, ... (can contains multiple items)
          *    ]
          * }
          * 
@@ -74,7 +86,19 @@ const Socket = (function() {
          *              w,
          *              h
          *          }         
-         *    }
+         *    },
+         *    HPItem: [
+         *      {
+         *          render,                   //boolean: only render this item if render == true
+         *          x,y,w,h                   //rectangle: item's position
+         *      }, ... (can contains multiple items)
+         *    ],
+         *    shieldItem: [
+         *      {
+         *          render,                   //boolean: only render this item if render == true
+         *          x,y,w,h                   //rectangle: item's position
+         *      }, ... (can contains multiple items)
+         *    ]
          * }
          * 
          * 
