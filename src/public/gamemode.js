@@ -20,11 +20,11 @@ const GameMode = function () {
             joinGame("/dodger");
         }
 
-        document.getElementById("end-game").onclick = () => {
-            hide();
-            loading.hide();
-            ranking.showRanking();
-        }
+        // document.getElementById("end-game").onclick = () => {
+        //     hide();
+        //     loading.hide();
+        //     ranking.showRanking();
+        // }
     }
 
     function hide() { 

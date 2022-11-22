@@ -167,13 +167,13 @@ const Login = function () {
             showWarning("signin", "An unknown error occured")
         })
 
-        await new Promise(function (resolve) {
-            setTimeout(() => resolve("done!"), 500);
-        });
+        // await new Promise(function (resolve) {
+        //     setTimeout(() => resolve("done!"), 500);
+        // });
 
-        hide();
+        // hide();
 
-        GameMode.show("Saber Athena");
+        // GameMode.show("Saber Athena");
 
 
     }
