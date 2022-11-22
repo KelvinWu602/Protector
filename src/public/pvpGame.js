@@ -219,17 +219,17 @@ const pvpGame = function() {
     function draw() {    
         ctx.clearRect(0, 0, canvas_height, canvas_width);
         if(gamestate){
-            console.log("gamestate exists");
+            //console.log("gamestate exists");
             for (let player of gamestate.player){
                 //Determine color
                 let playerIsMe = player.username==username;
-                console.log(player.username, username,playerIsMe);
+                //console.log(player.username, username,playerIsMe);
 
                 //Transform server coordinate to client coordinate
                 const attacker = coorShift(player.attacker);
-                console.log("attacker: ", attacker);
+                //console.log("attacker: ", attacker);
                 const dodger = coorShift(player.dodger);
-                console.log("dodger: ", dodger);
+                //console.log("dodger: ", dodger);
 
                 //Draw the characters
                 drawCharacter(attacker,playerIsMe,"attacker");

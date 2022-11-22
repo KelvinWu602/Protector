@@ -12,11 +12,13 @@ const GameMode = function () {
 
         document.getElementById("COOP_attacker_btn").onclick = () => {
             console.log("Join COOP game as attacker!");
+            coopGame.set_mode("attacker");
             joinGame("/attacker");
         }
 
         document.getElementById("COOP_dodger_btn").onclick = () => {
             console.log("Join COOP game as dodger!");
+            coopGame.set_mode("dodger");
             joinGame("/dodger");
         }
 
@@ -79,6 +81,7 @@ const GameMode = function () {
         }).catch(err=>{
             console.log("Unknown error on " + type + " Ajax");
             //TODO: Show error message
+            console.log(err);
         });
     }
     
