@@ -139,6 +139,7 @@ const Socket = (function() {
 
     // This function disconnects the socket from the server
     const disconnect = function() {
+        console.log("socket disconnect...");
         socket.disconnect();
         socket = null;
     };

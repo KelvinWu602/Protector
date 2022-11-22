@@ -267,6 +267,7 @@ io.on("connection", (socket) => {
     let PLAYERID = socket.request.session.username;
     let GAMEID = socket.request.session.gameid;
 
+    console.log("received connection from " + PLAYERID + " in game " + GAMEID);
     sockets[PLAYERID] = socket;
     
     const criteria = (game) => game.getID() == GAMEID;
@@ -276,14 +277,24 @@ io.on("connection", (socket) => {
     let game = undefined;
     if(!type){
         game = PVPs.find(criteria);
-        type = "PVP";
-    }else if(!type){
-        game = COOP_ATTACKERs.find(criteria);
-        type = "COOP_ATTACKERs";
-    }else if(!type){
-        game = COOP_DODGERs.find(criteria);
-        type = "COOP_DODGERs";
+        if(game){
+            type = "PVP";
+        }
     }
+    if(!type){
+        game = COOP_ATTACKERs.find(criteria);
+        if(game){
+            type = "COOP_ATTACKERs";
+        }
+    } 
+    if(!type){
+        game = COOP_DODGERs.find(criteria);
+        if(game){
+            type = "COOP_DODGERs";
+        }
+    }
+    console.log(GAMEID + " is a " + type + " game.");
+
 
     if(game){
         if(game.getPlayersID().length==2){    
