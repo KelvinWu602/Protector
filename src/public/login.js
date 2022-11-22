@@ -103,20 +103,20 @@ const Login = function () {
          * When ready, uncomment the fetch and comment all code below this line
          * ===========================================
          */
-        // await fetch("/validate")
-        // .then((res) => {
-        //     return(res.json())
-        // }).then((json) => {
-        //     if (json.status == "success") {
-        //         console.log("Logged in last time, auto signed in");
-        //         username_logged_in = userName;
-        //         console.log("logged in as: " + username_logged_in);
-        //         //hide the login page
-        //         hide();
-        //         //show the game mode selection screen
-        //         GameMode.show(username_logged_in);
-        //     } 
-        // })
+        await fetch("/validate")
+        .then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                console.log("Logged in last time, auto signed in");
+                username_logged_in = userName;
+                console.log("logged in as: " + username_logged_in);
+                //hide the login page
+                hide();
+                //show the game mode selection screen
+                GameMode.show(username_logged_in);
+            } 
+        })
     }
 
 
@@ -145,27 +145,27 @@ const Login = function () {
          * When ready, uncomment the fetch and comment all code below this line
          * ===========================================
          */
-        // await fetch("/signin", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: signin
-        // }).then((res) => {
-        //     return(res.json())
-        // }).then((json) => {
-        //     if (json.status == "success") {
-        //         username_logged_in = userName;
-        //         console.log("logged in as: " + username_logged_in);
-        //         hide(); 
-        //         GameMode.show(username_logged_in);
-        //     } else if(json.status == "error"){
-        //         showWarning("signin", json.error);
-        //     }
-        // }).catch((err) => {
-        //     console.log("Error on Signin Ajax");
-        //     showWarning("signin", "An unknown error occured")
-        // })
+        await fetch("/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: signin
+        }).then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                username_logged_in = userName;
+                console.log("logged in as: " + username_logged_in);
+                hide(); 
+                GameMode.show(username_logged_in);
+            } else if(json.status == "error"){
+                showWarning("signin", json.error);
+            }
+        }).catch((err) => {
+            console.log("Error on Signin Ajax");
+            showWarning("signin", "An unknown error occured")
+        })
 
         await new Promise(function (resolve) {
             setTimeout(() => resolve("done!"), 500);
@@ -206,30 +206,30 @@ const Login = function () {
          * When ready, uncomment the fetch and comment all code below this line
          * ===========================================
          */
-        // fetch("/register", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: register
-        // }).then((res) => {
-        //     return(res.json())
-        // }).then((json) => {
-        //     if (json.status == "success") {
-        //         //Bad implementation. Improve later.
-        //         showWarning("register", "Creation Successful, please signin now");
-        //     } else if(json.status == "error"){
-        //         showWarning("register", json.error);
-        //     }
-        // }).catch((err) => {
-        //     console.log("Error on register Ajax");
-        //     showWarning("register", "An unknown error occured")
-        // })
+        fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: register
+        }).then((res) => {
+            return(res.json())
+        }).then((json) => {
+            if (json.status == "success") {
+                //Bad implementation. Improve later.
+                showWarning("register", "Creation Successful, please signin now");
+            } else if(json.status == "error"){
+                showWarning("register", json.error);
+            }
+        }).catch((err) => {
+            console.log("Error on register Ajax");
+            showWarning("register", "An unknown error occured")
+        })
 
-        // //Dummy delay, delete later
-        // await new Promise(function (resolve) {
-        //     setTimeout(() => resolve("done!"), 500);
-        // });
+        //Dummy delay, delete later
+        await new Promise(function (resolve) {
+            setTimeout(() => resolve("done!"), 500);
+        });
 
         showWarning("register", "Creation Successful, please signin now");
     }

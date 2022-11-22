@@ -184,15 +184,19 @@ const ranking = function () {
         //=========================
         //COMMENT ALL LINES ABOVE WHEN READY FOR TESTING
         //=========================
+    
+        //Overwriting the previous HTML
+        document.querySelector(".RankingBody").innerHTML = `<div id="ranking-head"></div>`;
 
         document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
         document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
     }
 
+    //Listener: Fired when click play again
     //Should return to GameMode screen allow player to choose gamemode again
     const backToGameMode = function () {
         document.querySelector(".RankingBodyBig").style.display = "none";
-        Socket.disconnect();
+        //Socket.disconnect();
         GameMode.show(GameMode.getLoggedInUser());
     }
 
