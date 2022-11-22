@@ -76,12 +76,19 @@ const Attacker = function(initx, inity, gamevariable) {
 
 const Dodger = function(initx, inity, gamevariable) {
     const player = Player(initx,inity,gamevariable); 
-    let alive = true;
+    let life = 1;
+    let shielded = false;
     const getType = ()=>{ return type; }
     const getPlayer = ()=>{ return player; }
-    const died = ()=>{ alive = false; }
-    const isAlive = ()=>{ return alive; }
-    return {getPlayer,getType,died,isAlive};
+    const getLife = ()=>{ return life; }
+    const getShielded = ()=>{ return shielded; }
+    //Items handler
+    const addLife = ()=>{ life++; }
+    const addShield = ()=>{ shielded = true; }
+    //Damage handler
+    const damaged = ()=>{ if(!shielded){life--;} else {shielded=false;} }
+    const isAlive = ()=>life>0;
+    return {getPlayer,getType,getLife,getShielded,addLife,addShield,damaged,isAlive};
 }
 
 module.exports = {MOVESTATE, Attacker, Dodger};

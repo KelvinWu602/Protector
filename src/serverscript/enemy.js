@@ -48,7 +48,7 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
                 alive = false;
             }
             if(dodger.getPlayer().getEdge().collideWith(edge)){
-                dodger.died();
+                dodger.damaged();
             }
         }
     }

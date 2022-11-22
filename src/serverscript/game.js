@@ -1,5 +1,6 @@
 const {MOVESTATE, Attacker, Dodger} = require('./player.js');
 const {Enemy} = require('./enemy.js');
+const {Item} = require('./item.js');
 const fs = require("fs");
 
 const FPS = 30;
@@ -33,7 +34,9 @@ const PVP = function(ID){
                     movestate: MOVESTATE.STILL,
                 }
             }
-        ]   
+        ],
+        HPItem: [],
+        shieldItem: []
     };
 
     //Add a playerID to the game when receiving a PVP event
@@ -75,6 +78,13 @@ const PVP = function(ID){
         gamestate.player[1].attacker.obj = Attacker(875,575,gamestate);
         //initialize the dodger
         gamestate.player[1].dodger.obj = Dodger(875,175,gamestate);
+
+        //initialize the HP item
+        gamestate.HPItem.push(Item("HP",25,25,10000,5000)); //appear for 10s, disappear for 5s
+        gamestate.HPItem.push(Item("HP",25,25,10000,3000)); //appear for 10s, disappear for 3s
+
+        //initialize the shield item
+        gamestate.shieldItem.push(Item("Shield",50,50,5000,5000)); //appear for 5s, disappear for 5s
 
         let frames = 0;
         // start 60 frames per second
@@ -122,6 +132,30 @@ const PVP = function(ID){
             }
         }
 
+        //update HP item
+        for(let HPItem of gamestate.HPItem){
+            //check if expired
+            HPItem.update();
+            //check if collected
+            for(let i = 0 ; i < players.length ; i++){
+                let playeri = gamestate.player[i];
+                HPItem.checkCollect(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+                HPItem.checkCollect(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+            }
+        }
+
+        //update shield item
+        for(let shieldItem of gamestate.shieldItem){
+            //check if expired
+            shieldItem.update();
+            //check if collected
+            for(let i = 0 ; i < players.length ; i++){
+                let playeri = gamestate.player[i];
+                shieldItem.checkCollect(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+                shieldItem.checkCollect(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+            }
+        }
+
         //check gameover
         isOver();
 
@@ -138,6 +172,8 @@ const PVP = function(ID){
             player: [
                 { 
                     username:players[0],
+                    life: gamestate.player[0].dodger.obj.getPlayer().getLife(),
+                    shielded: gamestate.player[0].dodger.obj.getPlayer().getShielded(),
                     attacker : {
                         ...attackedge0.getXY(),
                         ...attackedge0.getWH()
@@ -149,6 +185,8 @@ const PVP = function(ID){
                 },
                 {
                     username:players[1],
+                    life: gamestate.player[1].dodger.obj.getPlayer().getLife(),
+                    shielded: gamestate.player[1].dodger.obj.getPlayer().getShielded(),
                     attacker : {
                         ...attackedge1.getXY(),
                         ...attackedge1.getWH()
@@ -158,7 +196,19 @@ const PVP = function(ID){
                         ...dodgeedge1.getWH()
                     }
                 }    
-            ]
+            ],
+            HPItem: [],
+            shieldItem: []
+        }
+
+        //append the HPItem data
+        for(let item of gamestate.HPItem){
+            gamestateToSend.HPItem.push(item.getState());
+        }
+
+        //append the ShieldItem data
+        for(let item of gamestate.shieldItem){
+            gamestateToSend.shieldItem.push(item.getState());
         }
 
         //send the game state to the client
@@ -171,17 +221,23 @@ const PVP = function(ID){
         if(gamestate.player[0].dodger.obj.getPlayer().getEdge()
         .collideWith(gamestate.player[1].attacker.obj.getPlayer().getEdge()))
         {
-            gamestate.gameover = true;
-            gamestate.winner = players[1];
-            gamestate.player[0].dodger.obj.died();
+            gamestate.player[0].dodger.obj.damaged();
+            //check how many lives the dodger has
+            if(gamestate.player[0].dodger.obj.getLife()<=0){
+                gamestate.gameover = true;
+                gamestate.winner = players[1];
+            }
         }
 
         if(gamestate.player[1].dodger.obj.getPlayer().getEdge()
         .collideWith(gamestate.player[0].attacker.obj.getPlayer().getEdge()))
         {
-            gamestate.gameover = true;
-            gamestate.winner = players[0];
-            gamestate.player[1].dodger.obj.died();
+            gamestate.player[1].dodger.obj.damaged();
+            //check how many lives the dodger has
+            if(gamestate.player[1].dodger.obj.getLife()<=0){
+                gamestate.gameover = true;
+                gamestate.winner = players[0];
+            }
         }
     }
 
@@ -236,7 +292,9 @@ const COOP = function(ID){
                 movestate: MOVESTATE.STILL,
             }
         },
-        enemies: []
+        enemies: [],
+        HPItem: [],
+        shieldItem: []
     };
 
     //Add a playerID to the game when receiving a PVP event
@@ -273,6 +331,11 @@ const COOP = function(ID){
             //initial position is in the range of x:(-400,1600) to (-200,1000)
             gamestate.enemies.push(Enemy(i,-400+Math.floor(Math.random()*2000),-200+Math.floor(Math.random()*1200),gamestate));
         }
+        //initialize the HPItem
+        gamestate.HPItem.push(Item("HP",25,25,5000,10000));
+        gamestate.HPItem.push(Item("HP",25,25,3000,10000));
+        //initialize the shieldItem
+        gamestate.shieldItem.push(Item("Shield",50,50,5000,5000));
         
         let levelscore = 10;
 
@@ -315,6 +378,24 @@ const COOP = function(ID){
             gamestate.player.dodger.obj.getPlayer().update(gamestate.player.attacker.movestate);
         }
 
+        //update HP item
+        for(let HPItem of gamestate.HPItem){
+            //check if expired
+            HPItem.update();
+            //check if collected
+            HPItem.checkCollect(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+            HPItem.checkCollect(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+        }
+
+        //update shield item
+        for(let shieldItem of gamestate.shieldItem){
+            //check if expired
+            shieldItem.update();
+            //check if collected
+            shieldItem.checkCollect(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+            shieldItem.checkCollect(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+        }
+
         //update enemies position
         for(let i = 0 ; i < NUMOFENEMIES; i++){
             gamestate.enemies[i].update(gamestate.player.attacker.obj,gamestate.player.dodger.obj);
@@ -326,7 +407,7 @@ const COOP = function(ID){
         }
         
         //check gameover
-        if(!gamestate.player.dodger.obj.isAlive()){
+        if(gamestate.player.dodger.obj.getLife()<=0){
             gamestate.gameover = true;
         }
 
@@ -337,6 +418,8 @@ const COOP = function(ID){
             gameover: gamestate.gameover,
             point: gamestate.point,
             player: { 
+                life: gamestate.player.dodger.obj.getLife(),
+                shielded: gamestate.player.dodger.obj.getShielded(),
                 attacker : {
                     username: gamestate.player.attacker.ID,
                     ...attackedge.getXY(),
@@ -348,7 +431,9 @@ const COOP = function(ID){
                     ...dodgeedge.getWH()
                 }
             },
-            enemies: []
+            enemies: [],
+            HPItem: [],
+            shieldItem: []
         }
         for(let i = 0 ; i < NUMOFENEMIES; i++){
             gamestateToSend.enemies.push({
@@ -357,7 +442,12 @@ const COOP = function(ID){
                 ...gamestate.enemies[i].getEdge().getWH()
             });
         }
-
+        for(let item of gamestate.HPItem){
+            gamestateToSend.HPItem.push(item.getState());
+        }
+        for(let item of gamestate.shieldItem){
+            gamestateToSend.shieldItem.push(item.getState());
+        }
         //send the game state to the client
         sockets[players[0]].emit('update',JSON.stringify(gamestateToSend));
         sockets[players[1]].emit('update',JSON.stringify(gamestateToSend));
