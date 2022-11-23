@@ -1,9 +1,9 @@
-const coopGame = function(){
+const coopGame = function () {
     const ctx = document.getElementById('canvas').getContext('2d');
     //render dimension
     let canvas_height = 1200;
     let canvas_width = 800;
-    
+
     let server_height = 0;
     let server_width = 0;
 
@@ -17,24 +17,24 @@ const coopGame = function(){
         a: 4,
         d: 8
     }
-    
+
     //To be sent to server on every update of movestate
     let moveState = [
         {
-            actor : "attacker",
+            actor: "attacker",
             movestate: 0
         }
     ];
-    
-    const set_mode = function(r){
+
+    const set_mode = function (r) {
         console.log("Set Mode to " + r);
-        role = r; 
+        role = r;
         moveState[0].actor = r;
     }
 
     //To be updated by the server "update" event
     let gamestate = undefined;
-    
+
     //To be called by keydown event
     const keydownHandler = (e) => {
         if (e.key === "w" || e.key === "a" || e.key === "s" || e.key === "d") {
@@ -54,14 +54,14 @@ const coopGame = function(){
             }
         }
     };
-    
+
     //Once constructed will be called
     console.log(ctx);
 
     /**
      * This function is called when socket received "startGame" event from the server
      */
-    function startGame(user,serverWidth, serverHeight){
+    function startGame(user, serverWidth, serverHeight) {
 
         console.log("START GAME");
 
@@ -71,7 +71,7 @@ const coopGame = function(){
 
         moveState = [
             {
-                actor : role,
+                actor: role,
                 movestate: 0
             }
         ];
@@ -85,19 +85,19 @@ const coopGame = function(){
         // });
 
         //Remove Loading Screen
-        loading.hide(); 
+        loading.hide();
         //Show Game Screen
         show();
         //Calls first frame
-        draw(); 
+        draw();
     }
 
     /**
      * This function is called when socket received "gameover" event from the server
      * @param stats users_data.json 
      */
-    function stopGame(stats){
-        gameIsGoing = false; 
+    function stopGame(stats) {
+        gameIsGoing = false;
 
         //remove the Key Event Listeners 
         document.removeEventListener('keydown', keydownHandler);
@@ -138,8 +138,8 @@ const coopGame = function(){
          *    ]
          * }
      */
-    function update(newstate){
-        gamestate = newstate; 
+    function update(newstate) {
+        gamestate = newstate;
     }
 
     /** 
@@ -155,35 +155,35 @@ const coopGame = function(){
      * 
     */
     function coorShift(serverRect) {
-        
-        x = serverRect.x;
-        y = serverRect.y; 
-        w = serverRect.w;
-        h = serverRect.h; 
 
-        const serverWH = server_width/server_height;
-        const clientWH = canvas_width/canvas_height;
+        x = serverRect.x;
+        y = serverRect.y;
+        w = serverRect.w;
+        h = serverRect.h;
+
+        const serverWH = server_width / server_height;
+        const clientWH = canvas_width / canvas_height;
 
         const clientRect = {};
         //should always render the whole server canvas, 
         //ie, client canvas > server canvas
 
-        if(serverWH >= clientWH){
-            clientRect.x = (x/server_width)*canvas_width;
-            clientRect.w = (w/server_width)*canvas_width;
+        if (serverWH >= clientWH) {
+            clientRect.x = (x / server_width) * canvas_width;
+            clientRect.w = (w / server_width) * canvas_width;
 
             //vertical offset of server canvas in client canvas
-            const offset_y = (canvas_height-canvas_width/serverWH)/2;
-            clientRect.y = (y/server_height)*canvas_width/serverWH + offset_y;
-            clientRect.h = (h/server_height)*canvas_width/serverWH;
-        }else{
-            clientRect.y = (x/server_height)*canvas_height;
-            clientRect.h = (h/server_height)*canvas_height;
+            const offset_y = (canvas_height - canvas_width / serverWH) / 2;
+            clientRect.y = (y / server_height) * canvas_width / serverWH + offset_y;
+            clientRect.h = (h / server_height) * canvas_width / serverWH;
+        } else {
+            clientRect.y = (y / server_height) * canvas_height;
+            clientRect.h = (h / server_height) * canvas_height;
 
             //horizontal offset of server canvas in client canvas
-            const offset_x = (canvas_width-canvas_height*serverWH)/2;
-            clientRect.x = (x/server_width)*canvas_height*serverWH + offset_x;
-            clientRect.w = (w/server_width)*canvas_height*serverWH;
+            const offset_x = (canvas_width - canvas_height * serverWH) / 2;
+            clientRect.x = (x / server_width) * canvas_height * serverWH + offset_x;
+            clientRect.w = (w / server_width) * canvas_height * serverWH;
         }
 
         return clientRect;
@@ -194,61 +194,72 @@ const coopGame = function(){
      * 
      */
     function drawCharacter(rect, role) {
-        const {x,y,w,h} = rect;
-        
-        ctx.fillRect(x,y,w,h);
+        const { x, y, w, h } = rect;
+
+        if (role == "attacker") {
+            ctx.fillStyle = "blue";
+        } else if (role == "dodger") {
+            ctx.fillStyle = "green"
+        } else if (role == "hp") {
+            ctx.fillStyle = "red"
+        } else if (role == "shield") {
+            ctx.fillStyle = "orange"
+        }
+
+        //Enemy rendered black
+
+        ctx.fillRect(x, y, w, h);
     }
 
-    function draw() {    
+    function draw() {
+
+        let windowWidth = document.documentElement.clientWidth;
+        let windowHeight = document.documentElement.clientHeight;
+
+        canvas_height = windowHeight - 40;
+        canvas_width = windowWidth - 40;
+
+        document.querySelector("canvas").width = windowWidth - 40;
+        document.querySelector("canvas").height = windowHeight - 40;
+
         ctx.clearRect(0, 0, canvas_height, canvas_width);
 
-        if(gamestate){
-            //console.log("gamestate exists");
-            // for (let player of gamestate.player){
-            //     //Determine color
-            //     let playerIsMe = player.username==username;
-            //     console.log(player.username, username,playerIsMe);
-
-            //     //Transform server coordinate to client coordinate
-            //     const attacker = coorShift(player.attacker);
-            //     console.log("attacker: ", attacker);
-            //     const dodger = coorShift(player.dodger);
-            //     console.log("dodger: ", dodger);
-
-            //     //Draw the characters
-            //     drawCharacter(attacker,playerIsMe,"attacker");
-            //     drawCharacter(dodger,playerIsMe,"dodger");
-            // }
+        if (gamestate) {
 
             drawCharacter(coorShift(gamestate.player.attacker), "attacker");
-            drawCharacter(coorShift(gamestate.player.attacker), "dodger");
+            console.log(coorShift(gamestate.player.attacker));
+            drawCharacter(coorShift(gamestate.player.dodger), "dodger");
 
-            for (const hp of gamestate.HPItem){
-                if(hp.render){
+            for (const hp of gamestate.HPItem) {
+                if (hp.render) {
                     drawCharacter(coorShift(hp), "hp");
                 }
             }
 
-            for (const s of gamestate.shieldItem){
-                if(s.render){
+            for (const s of gamestate.shieldItem) {
+                if (s.render) {
                     drawCharacter(coorShift(s), "shield");
                 }
             }
-            
-            if(!gamestate.gameover){
+
+            for (const e of gamestate.enemies) {
+                drawCharacter(coorShift(e), "enemy");
+            }
+
+            if (!gamestate.gameover) {
                 window.requestAnimationFrame(draw);
             }
-        }else{
+        } else {
             window.requestAnimationFrame(draw);
         }
     }
 
     //show the game canvas
-    function show(){
+    function show() {
         document.querySelector(".mainGame").style.display = "block";
 
         let windowWidth = document.documentElement.clientWidth;
-        let windowHeight = document.documentElement.clientHeight; 
+        let windowHeight = document.documentElement.clientHeight;
 
         document.querySelector("canvas").width = windowWidth - 40;
         document.querySelector("canvas").height = windowHeight - 40;
@@ -256,9 +267,9 @@ const coopGame = function(){
 
 
     //hide the game canvas
-    function hide(){
+    function hide() {
         document.querySelector(".mainGame").style.display = "none";
     }
 
-    return {draw, startGame, stopGame, update, set_mode}
+    return { draw, startGame, stopGame, update, set_mode }
 }()
