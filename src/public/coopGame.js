@@ -108,6 +108,8 @@ const coopGame = function () {
 
         hide();
 
+        Socket.disconnect();
+
         //Show the Stat Screen
         //Server will pass the user stats to the client
         //gamestate is also passed to the ranking page to extract relevant data
