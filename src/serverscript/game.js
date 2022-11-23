@@ -328,8 +328,12 @@ const COOP = function(ID){
         gamestate.player.dodger.obj = Dodger(875,375,gamestate);
         //initialize the enemies
         for(let i = 0 ; i < NUMOFENEMIES; i++){
-            //initial position is in the range of x:(-400,1600) to (-200,1000)
-            gamestate.enemies.push(Enemy(i,-400+Math.floor(Math.random()*2000),-200+Math.floor(Math.random()*1200),gamestate));
+            //random initial position
+            //x: [-400,0] or [1200,1600]
+            const enemyx = -400+Math.floor(Math.random()*400) + Math.round(Math.random())*1600;
+            //y: [-200,0] or [800,1000]
+            const enemyy = -200+Math.floor(Math.random()*200) + Math.round(Math.random())*1000;
+            gamestate.enemies.push(Enemy(i,enemyx,enemyy,gamestate));
         }
         //initialize the HPItem
         gamestate.HPItem.push(Item("HP",25,25,5000,10000));

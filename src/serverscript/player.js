@@ -78,6 +78,7 @@ const Dodger = function(initx, inity, gamevariable) {
     const player = Player(initx,inity,gamevariable); 
     let life = 1;
     let shielded = false;
+    let immutableTime = 0;
     const getType = ()=>{ return type; }
     const getPlayer = ()=>{ return player; }
     const getLife = ()=>{ return life; }
@@ -86,7 +87,16 @@ const Dodger = function(initx, inity, gamevariable) {
     const addLife = ()=>{ life++; }
     const addShield = ()=>{ shielded = true; }
     //Damage handler
-    const damaged = ()=>{ if(!shielded){life--;} else {shielded=false;} }
+    const damaged = ()=>{ 
+        if(!shielded){
+            if(Date.now()>immutableTime){
+                life--;
+            }
+        } else {
+            shielded=false; 
+            immutableTime = Date.now()+3000;    
+        } 
+    }
     const isAlive = ()=>life>0;
     return {getPlayer,getType,getLife,getShielded,addLife,addShield,damaged,isAlive};
 }

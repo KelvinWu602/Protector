@@ -104,6 +104,7 @@ app.get("/validate", (req,res)=>{
         if(req.session.username in users){
             res.json({ status: "success" });
             console.log("Sign in validated: " + req.session.username );
+            req.session.gameid = null;
             return;
         }
         res.json({ status: "error", error: "Please register." });
@@ -134,7 +135,7 @@ app.get("/pvp",(req,res)=>{
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid  });
         return;
     }
     
@@ -179,7 +180,7 @@ app.get("/attacker", (req,res)=>{
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid  });
         return;
     }
     
@@ -223,7 +224,7 @@ app.get("/dodger", (req,res)=>{
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid });
         return;
     }
     
@@ -334,8 +335,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect",()=>{
+        console.log("User " + PLAYERID + " disconnected socket.");
         game.quitPlayer(PLAYERID);
         delete socket.request.session.gameid;
+        socket.request.session.save();
         delete sockets[PLAYERID];
         if(game.getPlayersID().length==0){
             ongoingGames.splice(ongoingGames.indexOf(game),1);

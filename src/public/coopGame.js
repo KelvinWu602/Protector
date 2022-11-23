@@ -117,7 +117,7 @@ const coopGame = function () {
 
         //@TODO Dependency issue here, need to restructure the code for higher modularity
         //Modules are interdependent, need to fix this
-        ranking.showRanking(stats, gamestate, "pvp");
+        ranking.showRanking(stats, gamestate, "coop");
     }
 
     /**
