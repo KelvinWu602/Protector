@@ -144,6 +144,7 @@ const coopGame = function(){
 
     /** 
      * Transform rectangle in server canvas to client canvas
+     * Whatever item passed into this must have w,y,w,h as keys
      * 
      * @param x : x coordinate of rectangle in server
      * @param y : y coordinate of rectangle in server
@@ -154,7 +155,12 @@ const coopGame = function(){
      * 
     */
     function coorShift(serverRect) {
-        const {x,y,w,h} = serverRect;
+        
+        x = serverRect.x;
+        y = serverRect.y; 
+        w = serverRect.w;
+        h = serverRect.h; 
+
         const serverWH = server_width/server_height;
         const clientWH = canvas_width/canvas_height;
 
@@ -187,42 +193,46 @@ const coopGame = function(){
      * @TODO replace the render method with png images
      * 
      */
-    function drawCharacter(rect, playerIsMe, role) {
+    function drawCharacter(rect, role) {
         const {x,y,w,h} = rect;
-        if(playerIsMe){
-            if(role==="attacker"){
-                ctx.fillStyle = "red";
-            }else{
-                ctx.fillStyle = "orange";
-            }
-        }else{
-            if(role==="attacker"){
-                ctx.fillStyle = "blue";
-            }else{
-                ctx.fillStyle = "black";
-            }
-        }
+        
         ctx.fillRect(x,y,w,h);
     }
 
     function draw() {    
         ctx.clearRect(0, 0, canvas_height, canvas_width);
+
         if(gamestate){
-            console.log("gamestate exists");
-            for (let player of gamestate.player){
-                //Determine color
-                let playerIsMe = player.username==username;
-                console.log(player.username, username,playerIsMe);
+            //console.log("gamestate exists");
+            // for (let player of gamestate.player){
+            //     //Determine color
+            //     let playerIsMe = player.username==username;
+            //     console.log(player.username, username,playerIsMe);
 
-                //Transform server coordinate to client coordinate
-                const attacker = coorShift(player.attacker);
-                console.log("attacker: ", attacker);
-                const dodger = coorShift(player.dodger);
-                console.log("dodger: ", dodger);
+            //     //Transform server coordinate to client coordinate
+            //     const attacker = coorShift(player.attacker);
+            //     console.log("attacker: ", attacker);
+            //     const dodger = coorShift(player.dodger);
+            //     console.log("dodger: ", dodger);
 
-                //Draw the characters
-                drawCharacter(attacker,playerIsMe,"attacker");
-                drawCharacter(dodger,playerIsMe,"dodger");
+            //     //Draw the characters
+            //     drawCharacter(attacker,playerIsMe,"attacker");
+            //     drawCharacter(dodger,playerIsMe,"dodger");
+            // }
+
+            drawCharacter(coorShift(gamestate.player.attacker), "attacker");
+            drawCharacter(coorShift(gamestate.player.attacker), "dodger");
+
+            for (const hp of gamestate.HPItem){
+                if(hp.render){
+                    drawCharacter(coorShift(hp), "hp");
+                }
+            }
+
+            for (const s of gamestate.shieldItem){
+                if(s.render){
+                    drawCharacter(coorShift(s), "shield");
+                }
             }
             
             if(!gamestate.gameover){
