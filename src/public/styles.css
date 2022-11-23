@@ -376,6 +376,62 @@ canvas {
     transition: 0.2s;
 }
 
+.StatBox {
+    background-color: rgba(255, 255, 255, 0.224);
+    backdrop-filter: blur(5px);
+    height: 100px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-family: "lato";
+
+    width: 100%;
+}
+
+.HUDBox {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.CanvasDescription {
+    color: rgba(255, 255, 255, 0.622);
+    font-size: 13px;
+}
+
+.CanvasUserName {
+    font-size: 20px;
+}
+
+#stat-shield-box {
+    font-size: 30px;
+}
+
+#stat-life-box {
+    font-size: 30px;
+}
+
+.CanvasParition {
+    display: block;
+    height: 70px;
+    width: 2px;
+    border-radius: 9px;
+    background-color: rgba(255, 255, 255, 0.086);
+}
+
+.mainGame {
+    flex-direction: column;
+    align-items: center;
+}
+
 
 @media screen and (max-width: 700px) {
     .RankingBody {

@@ -11,6 +11,9 @@ const coopGame = function () {
 
     let role = "";
 
+    let previous_life = undefined; 
+    let previous_shielded = undefined; 
+
     const key_mapping = {
         w: 1, //attacker control
         s: 2,
@@ -218,15 +221,25 @@ const coopGame = function () {
         let windowWidth = document.documentElement.clientWidth;
         let windowHeight = document.documentElement.clientHeight;
 
-        canvas_height = windowHeight - 40;
+        canvas_height = windowHeight - 140;
         canvas_width = windowWidth - 40;
 
         document.querySelector("canvas").width = windowWidth - 40;
-        document.querySelector("canvas").height = windowHeight - 40;
+        document.querySelector("canvas").height = windowHeight - 140;
 
         ctx.clearRect(0, 0, canvas_height, canvas_width);
 
         if (gamestate) {
+
+            if(gamestate.player.life != previous_life){
+                document.getElementById("stat-life-box").textContent = gamestate.player.life;
+                previous_life = gamestate.player.life;
+            }
+
+            if(gamestate.player.shielded != previous_shielded){
+                document.getElementById("stat-shield-box").textContent = gamestate.player.shielded? "shield" : "no shield";
+                previous_shielded = gamestate.player.shielded;
+            }
 
             drawCharacter(coorShift(gamestate.player.attacker), "attacker");
             drawCharacter(coorShift(gamestate.player.dodger), "dodger");
@@ -258,13 +271,13 @@ const coopGame = function () {
 
     //show the game canvas
     function show() {
-        document.querySelector(".mainGame").style.display = "block";
+        document.querySelector(".mainGame").style.display = "flex";
 
         let windowWidth = document.documentElement.clientWidth;
         let windowHeight = document.documentElement.clientHeight;
 
         document.querySelector("canvas").width = windowWidth - 40;
-        document.querySelector("canvas").height = windowHeight - 40;
+        document.querySelector("canvas").height = windowHeight - 140;
     }
 
 
