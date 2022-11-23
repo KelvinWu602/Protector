@@ -16,7 +16,10 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
     }
 
     const updateXY = (attacker, dodger)=>{
-        const speed = gamevariable.speed;
+        const FACTOR = 1;
+        const speed = gamevariable.speed * FACTOR;
+        let {x,y} = edge.getXY();
+
         
         //calculating forces and return updated x y.
         const r_a = attacker.getPlayer().getDistance(edge);
@@ -26,6 +29,7 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
         const dodgerPosition = dodger.getPlayer().getEdge().getXY();
         const attackerPosition = attacker.getPlayer().getEdge().getXY();
 
+
         //Attraction force, point towards dodger's center
         vx = speed * (dodgerPosition.x + playerDimension.w/2 - x - edge.getWH().w/2) / r_d;
         vy = speed * (dodgerPosition.y + playerDimension.h/2 - y - edge.getWH().h/2) / r_d;
@@ -34,6 +38,8 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
         rfx = speed * 50 * (x + edge.getWH().w/2 - attackerPosition.x - playerDimension.w/2) / r_a / r_a;
         rfy = speed * 50 * (y + edge.getWH().h/2 - attackerPosition.y - playerDimension.h/2) / r_a / r_a;
 
+        // console.log("enemy: "+ r_a + " " + r_d + " " + vx + " " + vy + " " + rfx + " " + rfy);
+
         //update vx,vy
         vx += rfx;
         vy += rfy;
@@ -41,6 +47,7 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
         //update x,y
         x += vx;
         y += vy;
+        edge.setXY(x,y);
     }
 
     const update = (attacker, dodger)=>{

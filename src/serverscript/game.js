@@ -48,7 +48,7 @@ const PVP = function(ID){
         //delete the player
         players.splice(players.indexOf(playerID),1);
         //terminate the game if there is only one player left
-        gameover = true;
+        gamestate.gameover = true;
     }
 
     const getPlayersID = ()=>{
@@ -402,7 +402,11 @@ const COOP = function(ID){
             if(!gamestate.enemies[i].isAlive()){
                 gamestate.point++;
                 //random initial position
-                gamestate.enemies[i].reborn(-400+Math.floor(Math.random()*2000),-200+Math.floor(Math.random()*1200));
+                //x: [-400,0] or [1200,1600]
+                const enemyx = -400+Math.floor(Math.random()*400) + Math.round(Math.random())*1600;
+                //y: [-200,0] or [800,1000]
+                const enemyy = -200+Math.floor(Math.random()*200) + Math.round(Math.random())*1000;
+                gamestate.enemies[i].reborn(enemyx,enemyy);
             }
         }
         
