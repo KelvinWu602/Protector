@@ -145,7 +145,7 @@ const Socket = (function() {
     };
 
     const postInput = (input) => {
-        //console.log("Socket: " + JSON.stringify(input));
+        console.log("Socket: " + JSON.stringify(input));
         if (socket && socket.connected) {
             socket.emit("input", JSON.stringify(input));
         }

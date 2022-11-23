@@ -375,7 +375,7 @@ const COOP = function(ID){
             gamestate.player.attacker.obj.getPlayer().update(gamestate.player.attacker.movestate);
         }
         if(gamestate.player.dodger.movestate != MOVESTATE.STILL){
-            gamestate.player.dodger.obj.getPlayer().update(gamestate.player.attacker.movestate);
+            gamestate.player.dodger.obj.getPlayer().update(gamestate.player.dodger.movestate);
         }
 
         //update HP item

@@ -204,12 +204,14 @@ const coopGame = function () {
             ctx.fillStyle = "red"
         } else if (role == "shield") {
             ctx.fillStyle = "orange"
-        }
+        } else {ctx.fillStyle = "black"};
 
         //Enemy rendered black
 
         ctx.fillRect(x, y, w, h);
     }
+
+    let frame = 0; 
 
     function draw() {
 
@@ -227,7 +229,6 @@ const coopGame = function () {
         if (gamestate) {
 
             drawCharacter(coorShift(gamestate.player.attacker), "attacker");
-            console.log(coorShift(gamestate.player.attacker));
             drawCharacter(coorShift(gamestate.player.dodger), "dodger");
 
             for (const hp of gamestate.HPItem) {
@@ -244,6 +245,7 @@ const coopGame = function () {
 
             for (const e of gamestate.enemies) {
                 drawCharacter(coorShift(e), "enemy");
+                //console.log(coorShift(e));
             }
 
             if (!gamestate.gameover) {
