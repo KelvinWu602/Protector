@@ -1,3 +1,5 @@
+const {Box} = require('./box.js');
+
 module.exports.Enemy = function(ID,x,y, gamevariable) {
     const edge = Box(x,y,25,25);
     //set to false when enemy is killed
@@ -70,5 +72,5 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
         return edge;
     }
 
-    return {getXY,getEdge,getID,update,getSpeed,reborn,isAlive};
+    return {getEdge,getID,update,getSpeed,reborn,isAlive};
 };
