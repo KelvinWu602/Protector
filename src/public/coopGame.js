@@ -55,6 +55,8 @@ const coopGame = function () {
                 moveState[0].movestate -= key_mapping[e.key];
                 Socket.postInput(moveState);
             }
+        } if(e.key === "q"){
+            Socket.postCheat();
         }
     };
 

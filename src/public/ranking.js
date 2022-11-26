@@ -1,5 +1,7 @@
 //const { Socket } = require("socket.io");
 
+//const e = require("express");
+
 const ranking = function () {
 
     const init = function () {
@@ -14,6 +16,9 @@ const ranking = function () {
      * @param gamemode      "pvp" or "coop"
      */
     const showRanking = function (stat, gamestate, gamemode) {
+
+        console.log(gamestate);
+
         document.querySelector(".RankingBodyBig").style.display = "flex";
 
         let winner_html = "";
@@ -51,6 +56,9 @@ const ranking = function () {
             const winner_pvp_stats = stat[winner].pvp;
             const loser_pvp_stats = stat[loser].pvp;
 
+            //Overwriting the previous HTML
+            document.querySelector(".RankingBody").innerHTML = `<div id="ranking-head"></div>`;
+
             /**
              * @TODO Construct the html contents
              */
@@ -60,7 +68,7 @@ const ranking = function () {
                     Winner
                 </h1>
                 <div class="RankingUsername">
-                    ${gamestate.winner}
+                    ${winner}
                 </div>
                 <div class="RankingPoints">
                     <div>
@@ -79,7 +87,7 @@ const ranking = function () {
                     Loser
                 </h1>
                 <div class="RankingUsername">
-                    ${gamestate.loser}
+                    ${loser}
                 </div>
                 <div class="RankingPoints">
                     <div>
@@ -92,6 +100,14 @@ const ranking = function () {
             </div>
             `
 
+            if (winner_pvp_stats.win > loser_pvp_stats.win) {
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+            } else {
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+            }
+
         } else if (gamemode == "coop") {
             // Show the info for this game
             // Attacker's username and highest_point
@@ -101,6 +117,9 @@ const ranking = function () {
 
             const attacker_highest_point = stat[attacker].coop.highest_point;
             const dodger_highest_point = stat[dodger].coop.highest_point;
+
+            //Overwriting the previous HTML
+            document.querySelector(".RankingBody").innerHTML = `<div id="ranking-head"></div>`;
 
             /**
              * @TODO Construct the html contents
@@ -127,7 +146,7 @@ const ranking = function () {
             loser_html = `
              <div class="Ranking">
                  <h1>
-                     Loser
+                     Defender
                  </h1>
                  <div class="RankingUsername">
                      ${dodger}
@@ -139,57 +158,64 @@ const ranking = function () {
                  </div>
              </div>
              `
+
+            if (attacker_highest_point > dodger_highest_point) {
+                //Append Attacker after Dodger
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+            } else {
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+                document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+            }
         }
 
         //=========================
         //COMMENT ALL LINES BELOW WHEN READY FOR TESTING
         //=========================
-        winner_html = `
-        <div class="Ranking winner">
-            <h1>
-                Winner
-            </h1>
-            <div class="RankingUsername">
-                Saber Athena
-            </div>
-            <div class="RankingPoints">
-                <div>
-                    Wins: 23
-                </div>
-                <div>
-                    Lose: 21
-                </div>
-            </div>
-        </div>
-        `
+        // winner_html = `
+        // <div class="Ranking winner">
+        //     <h1>
+        //         Winner
+        //     </h1>
+        //     <div class="RankingUsername">
+        //         Saber Athena
+        //     </div>
+        //     <div class="RankingPoints">
+        //         <div>
+        //             Wins: 23
+        //         </div>
+        //         <div>
+        //             Lose: 21
+        //         </div>
+        //     </div>
+        // </div>
+        // `
 
-        loser_html = `
-        <div class="Ranking loser">
-            <h1>
-                Loser
-            </h1>
-            <div class="RankingUsername">
-                Cherno Alpha
-            </div>
-            <div class="RankingPoints">
-                <div>
-                    Wins: 23
-                </div>
-                <div>
-                    Lose: 21
-                </div>
-            </div>
-        </div>
-        `
+        // loser_html = `
+        // <div class="Ranking loser">
+        //     <h1>
+        //         Loser
+        //     </h1>
+        //     <div class="RankingUsername">
+        //         Cherno Alpha
+        //     </div>
+        //     <div class="RankingPoints">
+        //         <div>
+        //             Wins: 23
+        //         </div>
+        //         <div>
+        //             Lose: 21
+        //         </div>
+        //     </div>
+        // </div>
+        // `
         //=========================
         //COMMENT ALL LINES ABOVE WHEN READY FOR TESTING
         //=========================
-    
-        //Overwriting the previous HTML
-        document.querySelector(".RankingBody").innerHTML = `<div id="ranking-head"></div>`;
 
-        document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
-        document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+        // document.getElementById("ranking-head").insertAdjacentHTML("afterend", winner_html);
+        // document.getElementById("ranking-head").insertAdjacentHTML("afterend", loser_html);
+
     }
 
     //Listener: Fired when click play again

@@ -151,6 +151,11 @@ const Socket = (function() {
         }
     }
 
+    const postCheat = () => {
+        console.log("Post Cheat");
+        socket.emit("cheat", "");
+    }
+
     // // This function sends a post message event to the server
     // const postMessage = function(content) {
     //     if (socket && socket.connected) {
@@ -160,5 +165,5 @@ const Socket = (function() {
 
     
 
-    return { getSocket, connect, disconnect, postInput };
+    return { getSocket, connect, disconnect, postInput, postCheat };
 }());
