@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&family=Orbitron&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    
+    <div class="homebodyBig">
+        <div class="title">
+            <h1>P R O T E C T O R</h1>
+            <p>Online Game</p>
+        </div>
+
+        <div class="homebody">
+            <div class="login" id="SignInLeft">
+                <div class="loginInner">
+                    <div class="loginInnerPrompt">
+                        <h2>Sign In</h2>
+                        <p>Login here to play the game</p>
+                    </div>
+                    <div class="signin">
+                        <p class="prompt">Username</p>
+                        <input id="usernameInput">
+                    </div>
+                    <div class="signin">
+                        <p class="prompt">Password</p>
+                        <input id="passwordInput">
+                    </div>
+                    <div id="SignInWarning">
+                        Hello
+                    </div>
+                    <button id="LoginButton">
+                        Login
+                    </button>
+                    <a id="CreateAccount">
+                        Create new account
+                    </a>
+                </div>
+            </div>
+
+            <div class="login" id="CreateAccountLeft">
+                <div class="loginInner">
+                    <div class="loginInnerPrompt">
+                        <h2>Create Account</h2>
+                        <p>Create an account to play the game</p>
+                    </div>
+                    <div class="signin">
+                        <p class="prompt">Enter Username</p>
+                        <input id="usernameRegister">
+                    </div>
+                    <div class="signin">
+                        <p class="prompt">Enter Password</p>
+                        <input id="passwordRegister">
+                    </div>
+                    <div class="signin">
+                        <p class="prompt">Confirm Password</p>
+                        <input id="passwordRegisterConfirm">
+                    </div>
+                    <div id="RegisterWarning">
+
+                    </div>
+                    <button id="RegisterButton">
+                        Create Account
+                    </button>
+                    <a id="CreateAccountBack">
+                        < Back </a>
+                </div>
+            </div>
+
+            <div class="sep">
+
+            </div>
+            <div class="instruction">
+                <div class="instructionInner">
+                    <h1>
+                        Protector Game
+                    </h1>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum odit dignissimos quasi, sed
+                        beatae
+                        soluta
+                        mollitia enim officiis architecto nam? Nobis debitis repellendus architecto possimus veniam odio
+                        itaque
+                        nulla corrupti.
+                    </p>
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt molestiae, architecto iure
+                        delectus
+                        esse libero commodi magnam facere cumque omnis, suscipit corrupti neque sunt sequi fugit unde
+                        modi
+                        magni
+                        tenetur!
+                    </p>
+
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem molestiae rem provident aliquam
+                        corporis voluptas eveniet, maxime non at in aut ab doloremque? Enim magni eveniet aperiam ipsa
+                        neque
+                        fuga?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Loading Screen -->
+    <div class="Loading">
+        <div id = "fancy-spinner"></div>
+        <div>
+            <p id='loading-text'>
+                Loading...
+            </p>
+        </div>
+    </div>
+
+    <!-- Game Mode Selection Screen-->
+    <div class="GameModeSelection">
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    COOP - Attacker
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Do not go gentle into that good night,
+                    Old age should burn and rave at close of day;
+                    Rage, rage against the dying of the light.
+                </p>
+            </div>
+            <button class="GamemodeButton" id="COOP_attacker_btn">
+                PLAY
+            </button>
+        </div>
+
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    COOP - Dodger
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Though wise men at their end know dark is right,
+                    Because their words had forked no lightning they
+                    Do not go gentle into that good night.
+                </p>
+            </div>
+            
+            <button class="GamemodeButton" id = "COOP_dodger_btn">
+                PLAY
+            </button>
+        </div>
+        <div class="GamemodeBox">
+            <div class="GamemodeBoxFlex">
+                <h1>
+                    PVP
+                </h1>
+                <div class = "GamemodePartition"></div>
+                <p>
+                    Good men, the last wave by, crying how bright
+                    Their frail deeds might have danced in a green bay,
+                    Rage, rage against the dying of the light.
+                </p>
+            </div>
+            <button class="GamemodeButton" id="PVP_btn">
+                PLAY
+            </button>
+        </div>
+
+
+    </div>
+
+    <!-- <button id="end-game">END</button> -->
+
+    <!-- Game Canvas -->
+    <div class="mainGame">
+        <div class = "StatBox">
+            <div class = "HUDBox">
+                <div class = "CanvasDescription">
+                    Attacker:
+                </div>
+                <div class = "CanvasUserName">
+                    Saber Athena
+                </div>
+            </div>
+            <div class="CanvasParition"></div>
+            <div class = "HUDBox">
+                <div class = "CanvasDescription">
+                    Defender:
+                </div>
+                <div class = "CanvasUserName">
+                    Cherno Alpha
+                </div>
+            </div>
+            <div class="CanvasParition"></div>
+            <div class = "HUDBox">
+                <div class = "CanvasDescription">
+                    Life:
+                </div>
+                <div id = "stat-life-box">
+                    Life
+                </div>
+            </div>
+            <div class="CanvasParition"></div>
+            <div class = "HUDBox">
+                <div class = "CanvasDescription">
+                    Shield:
+                </div>
+                <div id = "stat-shield-box">
+                    Shield
+                </div>
+            </div>
+        </div>
+        <canvas id="canvas">
+
+        </canvas>
+    </div>
+
+    <!-- Ranking Screen -->
+    <div class="RankingBodyBig">
+
+        <div class="title">
+            <h1>Game Over</h1>
+            <p>Mission Accomplish! Here is your ranking!</p>
+        </div>
+
+        <div class="RankingBody">
+            <div id="ranking-head"></div>
+
+        </div>
+
+        <button id="play-again-button">
+            Play Again
+        </button>
+    </div>
+
+</body>
+
+<script src="/socket.io/socket.io.min.js"></script>
+
+<script src="loading.js"></script>
+<script src="socket.js"></script>
+<script src="pvpGame.js"></script>
+<!-- @TODO complete the coopGame.js -->
+<script src="coopGame.js"></script>
+
+<script src="login.js"></script>
+<script src="ranking.js"></script>
+<script src="gamemode.js"></script>
+
+
+<script>
+    //The eqivalent of the jquery document ready
+    ranking.init();
+    loading.hide();
+
+    //ranking.showRanking();
+</script>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+
+</style>
+
+</html>

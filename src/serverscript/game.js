@@ -1,5 +1,7 @@
 const {MOVESTATE, Attacker, Dodger} = require('./player.js');
 const {Enemy} = require('./enemy.js');
+const {Item} = require('./item.js');
+const fs = require("fs");
 
 const FPS = 30;
 
@@ -32,7 +34,9 @@ const PVP = function(ID){
                     movestate: MOVESTATE.STILL,
                 }
             }
-        ]   
+        ],
+        HPItem: [],
+        shieldItem: []
     };
 
     //Add a playerID to the game when receiving a PVP event
@@ -44,7 +48,7 @@ const PVP = function(ID){
         //delete the player
         players.splice(players.indexOf(playerID),1);
         //terminate the game if there is only one player left
-        gameover = true;
+        gamestate.gameover = true;
     }
 
     const getPlayersID = ()=>{
@@ -75,12 +79,20 @@ const PVP = function(ID){
         //initialize the dodger
         gamestate.player[1].dodger.obj = Dodger(875,175,gamestate);
 
+        //initialize the HP item
+        gamestate.HPItem.push(Item("HP",25,25,10000,5000)); //appear for 10s, disappear for 5s
+        gamestate.HPItem.push(Item("HP",25,25,10000,3000)); //appear for 10s, disappear for 3s
+
+        //initialize the shield item
+        gamestate.shieldItem.push(Item("Shield",50,50,5000,5000)); //appear for 5s, disappear for 5s
+
         let frames = 0;
         // start 60 frames per second
         let gameTimer = setInterval(()=>{
             if(gamestate.gameover) {
                 clearInterval(gameTimer);
-                //call gameover function
+                //call gameOver function
+                gameOver(sockets);
                 return;
             }
             update(sockets);
@@ -88,6 +100,7 @@ const PVP = function(ID){
             frames++;
             if(frames%(20*FPS)==0){
                 gamestate.speed += 5;
+                console.log("20 secs");
             }
         },1000/FPS);
     }
@@ -119,6 +132,30 @@ const PVP = function(ID){
             }
         }
 
+        //update HP item
+        for(let HPItem of gamestate.HPItem){
+            //check if expired
+            HPItem.update();
+            //check if collected
+            for(let i = 0 ; i < players.length ; i++){
+                let playeri = gamestate.player[i];
+                HPItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+                HPItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+            }
+        }
+
+        //update shield item
+        for(let shieldItem of gamestate.shieldItem){
+            //check if expired
+            shieldItem.update();
+            //check if collected
+            for(let i = 0 ; i < players.length ; i++){
+                let playeri = gamestate.player[i];
+                shieldItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+                shieldItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+            }
+        }
+
         //check gameover
         isOver();
 
@@ -135,6 +172,8 @@ const PVP = function(ID){
             player: [
                 { 
                     username:players[0],
+                    life: gamestate.player[0].dodger.obj.getLife(),
+                    shielded: gamestate.player[0].dodger.obj.getShielded(),
                     attacker : {
                         ...attackedge0.getXY(),
                         ...attackedge0.getWH()
@@ -146,6 +185,8 @@ const PVP = function(ID){
                 },
                 {
                     username:players[1],
+                    life: gamestate.player[1].dodger.obj.getLife(),
+                    shielded: gamestate.player[1].dodger.obj.getShielded(),
                     attacker : {
                         ...attackedge1.getXY(),
                         ...attackedge1.getWH()
@@ -155,7 +196,19 @@ const PVP = function(ID){
                         ...dodgeedge1.getWH()
                     }
                 }    
-            ]
+            ],
+            HPItem: [],
+            shieldItem: []
+        }
+
+        //append the HPItem data
+        for(let item of gamestate.HPItem){
+            gamestateToSend.HPItem.push(item.getState());
+        }
+
+        //append the ShieldItem data
+        for(let item of gamestate.shieldItem){
+            gamestateToSend.shieldItem.push(item.getState());
         }
 
         //send the game state to the client
@@ -168,18 +221,42 @@ const PVP = function(ID){
         if(gamestate.player[0].dodger.obj.getPlayer().getEdge()
         .collideWith(gamestate.player[1].attacker.obj.getPlayer().getEdge()))
         {
-            gamestate.gameover = true;
-            winner = players[1];
-            gamestate.player[0].dodger.obj.died();
+            gamestate.player[0].dodger.obj.damaged();
+            //check how many lives the dodger has
+            if(gamestate.player[0].dodger.obj.getLife()<=0){
+                gamestate.gameover = true;
+                gamestate.winner = players[1];
+            }
         }
 
         if(gamestate.player[1].dodger.obj.getPlayer().getEdge()
         .collideWith(gamestate.player[0].attacker.obj.getPlayer().getEdge()))
         {
-            gamestate.gameover = true;
-            winner = players[0];
-            gamestate.player[1].dodger.obj.died();
+            gamestate.player[1].dodger.obj.damaged();
+            //check how many lives the dodger has
+            if(gamestate.player[1].dodger.obj.getLife()<=0){
+                gamestate.gameover = true;
+                gamestate.winner = players[0];
+            }
         }
+    }
+
+    const gameOver = (sockets)=>{
+        //update users_data.json
+        const users_data = JSON.parse(fs.readFileSync('data/users_data.json'));
+        if(gamestate.winner == players[0]){
+            users_data[players[0]].pvp.win ++;
+            users_data[players[1]].pvp.lose ++;
+        }else{
+            users_data[players[0]].pvp.lose ++;
+            users_data[players[1]].pvp.win ++;
+        }
+        fs.writeFileSync('data/users_data.json',JSON.stringify(users_data,null,"    "));
+        console.log(ID + " is over and read users_data is updated");
+
+        //send gameover to the client
+        sockets[players[0]].emit('gameover',JSON.stringify(users_data));
+        sockets[players[1]].emit('gameover',JSON.stringify(users_data));
     }
 
     const getID = ()=>{
@@ -215,7 +292,9 @@ const COOP = function(ID){
                 movestate: MOVESTATE.STILL,
             }
         },
-        enemies: []
+        enemies: [],
+        HPItem: [],
+        shieldItem: []
     };
 
     //Add a playerID to the game when receiving a PVP event
@@ -228,7 +307,7 @@ const COOP = function(ID){
         //delete the player
         players.splice(players.indexOf(playerID),1);
         //terminate the game if there is only one player left
-        gameover = true;
+        gamestate.gameover = true;
     }
 
     const getPlayersID = ()=>{
@@ -249,9 +328,18 @@ const COOP = function(ID){
         gamestate.player.dodger.obj = Dodger(875,375,gamestate);
         //initialize the enemies
         for(let i = 0 ; i < NUMOFENEMIES; i++){
-            //initial position is in the range of x:(-400,1600) to (-200,1000)
-            gamestate.enemies.push(Enemy(i,-400+Math.floor(Math.random()*2000),-200+Math.floor(Math.random()*1200),gamestate));
+            //random initial position
+            //x: [-400,0] or [1200,1600]
+            const enemyx = -400+Math.floor(Math.random()*400) + Math.round(Math.random())*1600;
+            //y: [-200,0] or [800,1000]
+            const enemyy = -200+Math.floor(Math.random()*200) + Math.round(Math.random())*1000;
+            gamestate.enemies.push(Enemy(i,enemyx,enemyy,gamestate));
         }
+        //initialize the HPItem
+        gamestate.HPItem.push(Item("HP",25,25,5000,10000));
+        gamestate.HPItem.push(Item("HP",25,25,3000,10000));
+        //initialize the shieldItem
+        gamestate.shieldItem.push(Item("Shield",50,50,5000,5000));
         
         let levelscore = 10;
 
@@ -260,6 +348,7 @@ const COOP = function(ID){
             if(gamestate.gameover) {
                 clearInterval(gameTimer);
                 //call gameover function
+                gameOver(sockets);
                 return;
             }
             update(sockets);
@@ -290,7 +379,25 @@ const COOP = function(ID){
             gamestate.player.attacker.obj.getPlayer().update(gamestate.player.attacker.movestate);
         }
         if(gamestate.player.dodger.movestate != MOVESTATE.STILL){
-            gamestate.player.dodger.obj.getPlayer().update(gamestate.player.attacker.movestate);
+            gamestate.player.dodger.obj.getPlayer().update(gamestate.player.dodger.movestate);
+        }
+
+        //update HP item
+        for(let HPItem of gamestate.HPItem){
+            //check if expired
+            HPItem.update();
+            //check if collected
+            HPItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+            HPItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+        }
+
+        //update shield item
+        for(let shieldItem of gamestate.shieldItem){
+            //check if expired
+            shieldItem.update();
+            //check if collected
+            shieldItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+            shieldItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
         }
 
         //update enemies position
@@ -299,12 +406,16 @@ const COOP = function(ID){
             if(!gamestate.enemies[i].isAlive()){
                 gamestate.point++;
                 //random initial position
-                gamestate.enemies[i].reborn(-400+Math.floor(Math.random()*2000),-200+Math.floor(Math.random()*1200));
+                //x: [-400,0] or [1200,1600]
+                const enemyx = -400+Math.floor(Math.random()*400) + Math.round(Math.random())*1600;
+                //y: [-200,0] or [800,1000]
+                const enemyy = -200+Math.floor(Math.random()*200) + Math.round(Math.random())*1000;
+                gamestate.enemies[i].reborn(enemyx,enemyy);
             }
         }
         
         //check gameover
-        if(!gamestate.player.dodger.obj.isAlive()){
+        if(gamestate.player.dodger.obj.getLife()<=0){
             gamestate.gameover = true;
         }
 
@@ -315,6 +426,8 @@ const COOP = function(ID){
             gameover: gamestate.gameover,
             point: gamestate.point,
             player: { 
+                life: gamestate.player.dodger.obj.getLife(),
+                shielded: gamestate.player.dodger.obj.getShielded(),
                 attacker : {
                     username: gamestate.player.attacker.ID,
                     ...attackedge.getXY(),
@@ -326,7 +439,9 @@ const COOP = function(ID){
                     ...dodgeedge.getWH()
                 }
             },
-            enemies: []
+            enemies: [],
+            HPItem: [],
+            shieldItem: []
         }
         for(let i = 0 ; i < NUMOFENEMIES; i++){
             gamestateToSend.enemies.push({
@@ -335,10 +450,31 @@ const COOP = function(ID){
                 ...gamestate.enemies[i].getEdge().getWH()
             });
         }
-
+        for(let item of gamestate.HPItem){
+            gamestateToSend.HPItem.push(item.getState());
+        }
+        for(let item of gamestate.shieldItem){
+            gamestateToSend.shieldItem.push(item.getState());
+        }
         //send the game state to the client
         sockets[players[0]].emit('update',JSON.stringify(gamestateToSend));
         sockets[players[1]].emit('update',JSON.stringify(gamestateToSend));
+    }
+
+    const gameOver = (sockets)=>{
+        //update users_data.json
+        const users_data = JSON.parse(fs.readFileSync('data/users_data.json'));
+        for(let i = 0 ; i < 2 ; i++){
+            if(users_data[players[i]].coop.highest_point < gamestate.point){
+                users_data[players[i]].coop.highest_point = gamestate.point;
+            }
+        }
+        fs.writeFileSync('data/users_data.json',JSON.stringify(users_data,null,"    "));
+        console.log(ID + " is over and read users_data is updated");
+
+        //send gameover to the client
+        sockets[players[0]].emit('gameover',JSON.stringify(users_data));
+        sockets[players[1]].emit('gameover',JSON.stringify(users_data));
     }
 
     const getID = ()=>{

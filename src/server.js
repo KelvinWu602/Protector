@@ -1,4 +1,4 @@
-const {PVP} = require('./serverscript/game.js');
+const {PVP, COOP} = require('./serverscript/game.js');
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -56,9 +56,19 @@ app.post("/register", (req,res)=>{
     //update the users.json file 
     const hash = bcrypt.hashSync(password, 10);
     users[username] = hash;
-
     fs.writeFileSync("data/users.json", JSON.stringify(users,null,"    "));
-
+    //update the users_data.json file
+    const users_data = JSON.parse(fs.readFileSync("data/users_data.json"));
+    users_data[username] = {
+        pvp : {
+            win : 0,
+            lose: 0
+        },
+        coop : {
+            highest_point : 0,
+        }
+    };
+    fs.writeFileSync("data/users_data.json", JSON.stringify(users_data,null,"    "));
 
     console.log("User registered: " + username + " , " + password);
     res.json({ status: "success" });
@@ -66,7 +76,7 @@ app.post("/register", (req,res)=>{
 
 app.post("/signin", (req,res)=>{
     const {username, password} = req.body;
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
     if(!(username in users)){
         res.json({ status: "error", error: "Username does not exist." });
         return;
@@ -93,7 +103,8 @@ app.get("/validate", (req,res)=>{
     if(req.session.username){
         if(req.session.username in users){
             res.json({ status: "success" });
-            console.log("User signed in: " + req.session.username );
+            console.log("Sign in validated: " + req.session.username );
+            req.session.gameid = null;
             return;
         }
         res.json({ status: "error", error: "Please register." });
@@ -108,6 +119,8 @@ app.get("/signout",(req,res)=>{
 });
 
 app.get("/pvp",(req,res)=>{
+    console.log("pvp handler. requested user: " + req.session.username );
+
     //check if the user is online
     if(!req.session.username){
         res.json({ status: "error", error: "Please log in." });
@@ -115,17 +128,20 @@ app.get("/pvp",(req,res)=>{
     }
     //check if the user is registered
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    if(!users.includes(req.session.username)){
+    if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
     }
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid  });
         return;
     }
     
+    console.log("valid request");
+
+
     const PLAYERID = req.session.username;
     //check if there is a game waiting
     try{
@@ -157,14 +173,14 @@ app.get("/attacker", (req,res)=>{
     }
     //check if the user is registered
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    if(!users.includes(req.session.username)){
+    if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
     }
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid  });
         return;
     }
     
@@ -201,14 +217,14 @@ app.get("/dodger", (req,res)=>{
     }
     //check if the user is registered
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    if(!users.includes(req.session.username)){
+    if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
     }
 
     //check if the user is already in a game
     if(req.session.gameid){
-        res.json({ status: "error", error: "You are already in a game." });
+        res.json({ status: "error", error: "You are already in a game:" + req.session.gameid });
         return;
     }
     
@@ -252,6 +268,7 @@ io.on("connection", (socket) => {
     let PLAYERID = socket.request.session.username;
     let GAMEID = socket.request.session.gameid;
 
+    console.log("received connection from " + PLAYERID + " in game " + GAMEID);
     sockets[PLAYERID] = socket;
     
     const criteria = (game) => game.getID() == GAMEID;
@@ -261,14 +278,24 @@ io.on("connection", (socket) => {
     let game = undefined;
     if(!type){
         game = PVPs.find(criteria);
-        type = "PVP";
-    }else if(!type){
-        game = COOP_ATTACKERs.find(criteria);
-        type = "COOP_ATTACKERs";
-    }else if(!type){
-        game = COOP_DODGERs.find(criteria);
-        type = "COOP_DODGERs";
+        if(game){
+            type = "PVP";
+        }
     }
+    if(!type){
+        game = COOP_ATTACKERs.find(criteria);
+        if(game){
+            type = "COOP_ATTACKERs";
+        }
+    } 
+    if(!type){
+        game = COOP_DODGERs.find(criteria);
+        if(game){
+            type = "COOP_DODGERs";
+        }
+    }
+    console.log(GAMEID + " is a " + type + " game.");
+
 
     if(game){
         if(game.getPlayersID().length==2){    
@@ -291,10 +318,13 @@ io.on("connection", (socket) => {
             game.startGame(sockets);
             
             for(let playerID of game.getPlayersID()){
-                sockets[playerID].emit("startGame");
+                sockets[playerID].emit("startGame",JSON.stringify({canvasWidth:1200,canvasHeight:800}));
             }
+        }else{
+            console.log("User " + PLAYERID + " is waiting for 2nd player in "+ type);
         }
     }
+
 
     socket.on("input",(commands)=>{
         commands = JSON.parse(commands);
@@ -305,10 +335,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect",()=>{
-        delete socket.request.session.gameid;
-        delete sockets[PLAYERID];
-
+        console.log("User " + PLAYERID + " disconnected socket.");
         game.quitPlayer(PLAYERID);
+        delete socket.request.session.gameid;
+        socket.request.session.save();
+        delete sockets[PLAYERID];
         if(game.getPlayersID().length==0){
             ongoingGames.splice(ongoingGames.indexOf(game),1);
             delete game;

@@ -1,0 +1,440 @@
+html{
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-image: url("wp2082809.jpg");
+    background-repeat: no-repeat;
+}
+
+canvas {
+    border: 3px solid black;
+}
+
+.homebodyBig {
+    height: 100%;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Orbitron';
+    margin-bottom: 2vh;
+}
+
+.title h1 {
+    font-size: 75px;
+    text-shadow: 0 0 10px white;
+    margin: 0;
+}
+
+.title p {
+    font-size: 15px;
+}
+
+.homebody {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.375);
+    border-radius: 20px;
+    backdrop-filter: blur(7px);
+
+    padding: 50px 5%;
+
+    color: white;
+    font-family: "Lato";
+
+    transition: backdrop-filter 1s;
+}
+
+.homebody input{
+    background-color: rgba(255, 255, 255, 0.26);
+    width: 100%;
+    border: unset;
+    height: 35px;
+    border-radius: 3px;
+}
+
+.homebody .prompt {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.homebody button {
+    all: unset;
+
+    text-align: center;
+    height: 45px;
+
+    margin-top: 7px;
+    margin-bottom: 7px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    width: 100%;
+    background-color: rgba(255, 0, 0, 0);
+
+    transition: 0.5s;
+}
+
+.homebody a{
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+.homebody button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.079);
+    transition: 0.2s;
+}
+
+.homebody:hover {
+    backdrop-filter: blur(30px);
+    transition: 1s;
+}
+
+.Loading {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: none;
+
+    backdrop-filter: blur(30px);
+}
+
+.Loading p {
+    font-family: 'Lato';
+    color: white;
+    font-size: 30px;
+}
+
+.login {
+    width: 450px;
+}
+
+.loginInner {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: auto;
+}
+
+.login p {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.login h2 {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.loginInnerPrompt {
+    margin-bottom: 10px;
+}
+
+#CreateAccountLeft {
+    display: none;
+}
+
+.instruction {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.instructionInner {
+    max-width: 600px;
+    min-width: 370px;
+    margin-left: 100px;
+}
+
+.sep {
+    width: 2px;
+    height: 590px;
+    background-color: #ffffff30;
+    display: block;
+    border-radius: 3px;
+}
+
+.signin {
+    margin-bottom: 5px;
+}
+
+.mainGame {
+    display: none;
+}
+
+.RankingBodyBig {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.RankingBody {
+    width: 90%;
+    max-width: 1200px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(255, 255, 255, 0.119);
+
+    border-radius: 10px;
+
+    height: 50vh;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+}
+
+.Ranking {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.283);
+    backdrop-filter: blur(10px);
+    
+    margin: 5px;
+
+    border-radius: 5px;
+
+    font-family: 'Lato';
+    color: white;
+}
+
+.RankingBodyBig button {
+    all: unset;
+
+    text-align: center;
+    height: 55px;
+
+    margin-top: 7px;
+    margin-bottom: 7px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    width: 300px;
+    font-family: 'Lato';
+    color: white;
+    background-color: rgba(255, 0, 0, 0);
+
+    margin-top: 30px;
+
+    transition: 0.5s;
+}
+
+.RankingBodyBig button:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.559);
+    transition: 0.2s;
+}
+
+.RankingBody h1 {
+    font-family: 'Orbitron';
+}
+
+.RankingBody .RankingUsername {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.RankingBody .RankingPoints div {
+    margin: 5px;
+}
+
+.RankingBody .winner {
+    background-color: rgb(76 175 80 / 32%);
+}
+
+.RankingBody .loser {
+    background-color: rgb(255 39 23 / 18%);
+} 
+
+.GameModeSelection {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.GamemodeBox {
+    background-color: white;
+    width: 330px;
+    height: 500px;
+    
+    margin: 15px;
+
+    background-color: rgb(0 0 0 / 20%);
+    backdrop-filter: blur(30px);
+
+    color: white;
+
+    font-family: 'Lato';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    transition: 1s;
+}
+
+.GamemodeBox:hover {
+
+    width: 370px;
+    height: 540px;
+
+    background-color: rgb(0 0 0 / 35%);
+
+    border-radius: 10px;
+
+    transition: 1s;
+
+}
+
+.GamemodeBoxFlex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+    padding-top: 150px;
+    width: 270px;
+
+    flex-grow: 1;
+}
+
+.GamemodeBoxFlex p{
+    text-align: center;
+}
+
+.GamemodeButton {
+    all: unset;
+
+    text-align: center;
+    height: 45px;
+
+    margin-top: 7px;
+    margin-bottom: 50px;
+
+    border: 1px solid white;
+    border-radius: 4px;
+
+    width: 150px;
+    font-family: 'Lato';
+    color: white;
+    background-color: rgba(255, 0, 0, 0);
+
+    transition: 0.5s;
+}
+
+.GamemodePartition {
+    display: block;
+    width: 200px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.326);
+    border-radius: 2px;
+}
+
+.GamemodeButton:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.559);
+    transition: 0.2s;
+}
+
+.StatBox {
+    background-color: rgba(255, 255, 255, 0.224);
+    backdrop-filter: blur(5px);
+    height: 100px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-family: "lato";
+
+    width: 100%;
+}
+
+.HUDBox {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.CanvasDescription {
+    color: rgba(255, 255, 255, 0.622);
+    font-size: 13px;
+}
+
+.CanvasUserName {
+    font-size: 20px;
+}
+
+#stat-shield-box {
+    font-size: 30px;
+}
+
+#stat-life-box {
+    font-size: 30px;
+}
+
+.CanvasParition {
+    display: block;
+    height: 70px;
+    width: 2px;
+    border-radius: 9px;
+    background-color: rgba(255, 255, 255, 0.086);
+}
+
+.mainGame {
+    flex-direction: column;
+    align-items: center;
+}
+
+
+@media screen and (max-width: 700px) {
+    .RankingBody {
+        width: 100%;
+    }
+  }

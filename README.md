@@ -15,6 +15,16 @@ You need to cooperate with another player, each controlling either knight or pri
 
 Sounds simple, but not so simple when you play it ;)
 
+### In-game items:
+1. HP item
+
+Your princess will get 1 extra HP point if any of your knight and princess collected it.
+
+2. Shield
+
+Your princess can prevent damage for once.
+
+
 ## Directory 
 
 |-- documentation\
@@ -25,6 +35,7 @@ Sounds simple, but not so simple when you play it ;)
 |=========|--users.json : stores the username, password pairs for registered users\
 |====|--public : the static files that serves the frontend\
 |====|--serverscript : javascript modules that compose the game logic\
+|=========|--item.js : define a generalization for in-game items: HP and Shield\
 |=========|--box.js : define the position and dimension of an entity, check distance and collision\
 |=========|--player.js : define the response on move states, wrapped with Attacker and Dodger\
 |=========|--enemy.js : define the enemy behavior\
