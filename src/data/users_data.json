@@ -41,7 +41,7 @@
             "lose": 0
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 5
         }
     },
     "jo": {
@@ -50,7 +50,7 @@
             "lose": 0
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 5
         }
     },
     "joj": {

@@ -18,8 +18,17 @@ const pvpGame = function() {
         k: 2,
         j: 4,
         l: 8,
+        
     }
     
+    let attacker = new Image();
+        attacker.src = "attacker.png";
+    let enemy = new Image();
+        enemy.src= "enemy.png";
+    let red =new Image();
+        red.src="red.png";
+    let orange=new Image();
+        orange.src="orange.png";
     //To be sent to server on every update of movestate
     let moveState = [
         {
@@ -201,19 +210,18 @@ const pvpGame = function() {
     function drawCharacter(rect, playerIsMe, role) {
         const {x,y,w,h} = rect;
         if(playerIsMe){
-            if(role==="attacker"){
-                ctx.fillStyle = "red";
+            if(role=="attacker"){
+                ctx.drawImage(red,x,y,w,h)
             }else{
-                ctx.fillStyle = "orange";
+                ctx.drawImage(orange,x,y,w,h)
             }
         }else{
-            if(role==="attacker"){
-                ctx.fillStyle = "blue";
+            if(role=="attacker"){
+                ctx.drawImage(attacker,x,y,w,h);
             }else{
-                ctx.fillStyle = "black";
+                ctx.drawImage(enemy,x,y,w,h);
             }
         }
-        ctx.fillRect(x,y,w,h);
     }
 
     function draw() {    

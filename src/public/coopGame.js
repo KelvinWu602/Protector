@@ -12,7 +12,18 @@ const coopGame = function () {
     let role = "";
 
     let previous_life = undefined; 
-    let previous_shielded = undefined; 
+    let previous_shielded = undefined;
+
+    let attacker = new Image();
+        attacker.src = "attacker.png";
+    let dodger = new Image();
+        dodger.src= "dodger.png";
+    let hp =new Image();
+        hp.src="hp.png";
+    let shield =new Image();
+        shield.src="shield.png";
+    let enemy = new Image();
+        enemy.src="enemy.png";
 
     const key_mapping = {
         w: 1, //attacker control
@@ -202,12 +213,27 @@ const coopGame = function () {
      *
      * 
      */
-    /**function  drawCharacter()
-     * {
-     * }
-     */
+    function  drawCharacter(rect, role)
+      {
+        const { x, y, w, h } = rect;
+      if (role == "attacker") 
+        {
+        ctx.drawImage(attacker,x,y,w,h)
+        }
+         else if (role == "dodger")
+         {
+            ctx.drawImage(dodger,x,y,w,h)
+        } else if (role == "hp") {
+            ctx.drawImage(hp,x,y,w,h)
+        } else if (role == "shield") {
+            ctx.drawImage(shield,x,y,w,h)
 
-    function drawCharacter(rect, role) {
+        } else {ctx.drawImage(enemy,x,y,w,h) };
+
+     }
+     
+
+    /**function drawCharacter(rect, role) {
         const { x, y, w, h } = rect;
 
         if (role == "attacker") {
@@ -219,11 +245,14 @@ const coopGame = function () {
         } else if (role == "shield") {
             ctx.fillStyle = "orange"
         } else {ctx.fillStyle = "black"};
+        
 
         //Enemy rendered black
 
         ctx.fillRect(x, y, w, h);
+
     }
+    */
 
     let frame = 0; 
 
@@ -254,7 +283,7 @@ const coopGame = function () {
 
             drawCharacter(coorShift(gamestate.player.attacker), "attacker");
             drawCharacter(coorShift(gamestate.player.dodger), "dodger");
-
+            console.log("ddd");
             for (const hp of gamestate.HPItem) {
                 if (hp.render) {
                     drawCharacter(coorShift(hp), "hp");
