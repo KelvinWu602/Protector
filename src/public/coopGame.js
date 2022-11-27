@@ -196,10 +196,17 @@ const coopGame = function () {
         return clientRect;
     }
 
+
     /**
      * @TODO replace the render method with png images
+     *
      * 
      */
+    /**function  drawCharacter()
+     * {
+     * }
+     */
+
     function drawCharacter(rect, role) {
         const { x, y, w, h } = rect;
 

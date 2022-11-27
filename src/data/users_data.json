@@ -34,5 +34,32 @@
         "coop": {
             "highest_point": 10
         }
+    },
+    "jojo": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
+        }
+    },
+    "jo": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
+        }
+    },
+    "joj": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
+        }
     }
 }
