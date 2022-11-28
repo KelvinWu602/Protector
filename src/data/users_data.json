@@ -1,20 +1,20 @@
 {
     "kelvin": {
         "pvp": {
-            "win": 4,
+            "win": 18,
             "lose": 4
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 3
         }
     },
     "fox": {
         "pvp": {
             "win": 4,
-            "lose": 4
+            "lose": 18
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 3
         }
     },
     "Saber": {
@@ -33,6 +33,33 @@
         },
         "coop": {
             "highest_point": 10
+        }
+    },
+    "jojo": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 5
+        }
+    },
+    "jo": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 5
+        }
+    },
+    "joj": {
+        "pvp": {
+            "win": 0,
+            "lose": 0
+        },
+        "coop": {
+            "highest_point": 0
         }
     }
 }

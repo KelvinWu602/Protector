@@ -9,6 +9,9 @@ const pvpGame = function() {
 
     let username = "";
 
+    let previous_life = undefined; 
+    let previous_shielded = undefined;
+
     const key_mapping = {
         w: 1, //attacker control
         s: 2,
@@ -20,6 +23,11 @@ const pvpGame = function() {
         l: 8,
     }
     
+    const attacker_img = new Image();
+    const dodger_img = new Image();
+    const shield_img = new Image();
+    const hp_img = new Image();
+
     //To be sent to server on every update of movestate
     let moveState = [
         {
@@ -47,6 +55,8 @@ const pvpGame = function() {
                 moveState[1].movestate += key_mapping[e.key];
                 Socket.postInput(moveState);
             }
+        }else if(e.key === " ") {
+            Socket.postCheat();
         }
     };
 
@@ -68,10 +78,29 @@ const pvpGame = function() {
     //Once constructed will be called
     console.log(ctx);
 
+    function loadImage(img,src){
+        img.src = src;
+        return img.decode()
+    }
+
+    async function loadAllImages(){
+        await loadImage(attacker_img,"/assets/attacker.png");
+        await loadImage(dodger_img,"/assets/dodger.png");
+        await loadImage(shield_img,"/assets/shield.png");
+        await loadImage(hp_img,"/assets/hp.png");
+    }
+
+    
     /**
      * This function is called when socket received "startGame" event from the server
      */
     function startGame(user,serverWidth, serverHeight){
+        //stop bgm
+        sounds.bgm.pause();
+        sounds.bgm.currentTime = 0;
+        //play game bgm
+        sounds.ingame.play();
+
         username = user;
         server_height = serverHeight;
         server_width = serverWidth;
@@ -88,19 +117,19 @@ const pvpGame = function() {
         ];
         gamestate = undefined;
 
-        // set up event listeners
-        document.addEventListener('keydown', keydownHandler);
-        document.addEventListener("keyup", keyupHandler);
-        // document.querySelector("#stopGameTest").addEventListener("click", ()=> {
-        //     stopGame(); 
-        // });
-
-        //Remove Loading Screen
-        loading.hide(); 
-        //Show Game Screen
-        show();
-        //Calls first frame
-        draw(); 
+        loadAllImages().then(()=>{
+            console.log("Start Game!");
+            // set up event listeners
+            document.addEventListener('keydown', keydownHandler);
+            document.addEventListener("keyup", keyupHandler);
+        
+            //Remove Loading Screen
+            loading.hide(); 
+            //Show Game Screen
+            show();
+            //Calls first frame
+            draw(); 
+        });
     }
 
     /**
@@ -108,7 +137,10 @@ const pvpGame = function() {
      * @param stats users_data.json 
      */
     function stopGame(stats){
-        gameIsGoing = false; 
+        sounds.ingame.pause();
+        sounds.ingame.currentTime = 0;
+
+        gameIsGoing = false;
 
         //remove the Key Event Listeners 
         document.removeEventListener('keydown', keydownHandler);
@@ -116,13 +148,13 @@ const pvpGame = function() {
 
         hide();
 
-        //Show the Stat Screen
-        //Server will pass the user stats to the client
-        //gamestate is also passed to the ranking page to extract relevant data
-        //Stats screen is different based on the gamemode
+        Socket.disconnect();
 
-        //@TODO Dependency issue here, need to restructure the code for higher modularity
-        //Modules are interdependent, need to fix this
+        if(gamestate.winner == username){ 
+            sounds.win.play()
+        }else {
+            sounds.lose.play();
+        }
         ranking.showRanking(stats, gamestate, "pvp");
     }
 
@@ -166,6 +198,9 @@ const pvpGame = function() {
     */
     function coorShift(serverRect) {
         const {x,y,w,h} = serverRect;
+
+        console.log(canvas_width,canvas_height);
+
         const serverWH = server_width/server_height;
         const clientWH = canvas_width/canvas_height;
 
@@ -182,7 +217,7 @@ const pvpGame = function() {
             clientRect.y = (y/server_height)*canvas_width/serverWH + offset_y;
             clientRect.h = (h/server_height)*canvas_width/serverWH;
         }else{
-            clientRect.y = (x/server_height)*canvas_height;
+            clientRect.y = (y/server_height)*canvas_height;
             clientRect.h = (h/server_height)*canvas_height;
 
             //horizontal offset of server canvas in client canvas
@@ -200,40 +235,76 @@ const pvpGame = function() {
      */
     function drawCharacter(rect, playerIsMe, role) {
         const {x,y,w,h} = rect;
-        if(playerIsMe){
-            if(role==="attacker"){
-                ctx.fillStyle = "red";
-            }else{
-                ctx.fillStyle = "orange";
-            }
-        }else{
-            if(role==="attacker"){
-                ctx.fillStyle = "blue";
-            }else{
-                ctx.fillStyle = "black";
-            }
+        // if(playerIsMe){
+        if(role=="attacker"){
+            ctx.textAlign = "center";
+            ctx.textBaseLine = "middle";
+            ctx.strokeText(playerIsMe?"P1":"P2",x+w/2,y-h/2);
+            ctx.drawImage(attacker_img,x,y,w,h)
+        }else if(role=="dodger"){
+            ctx.textAlign = "center";
+            ctx.textBaseLine = "middle";
+            ctx.strokeText(playerIsMe?"P1":"P2",x+w/2,y-h/2);
+            ctx.drawImage(dodger_img,x,y,w,h)
+        } else if (role == "hp") {
+            ctx.drawImage(hp_img,x,y,w,h)
+        } else if (role == "shield") {
+            ctx.drawImage(shield_img,x,y,w,h)
         }
-        ctx.fillRect(x,y,w,h);
+       
     }
 
     function draw() {    
-        ctx.clearRect(0, 0, canvas_height, canvas_width);
+        let windowWidth = document.documentElement.clientWidth;
+        let windowHeight = document.documentElement.clientHeight;
+
+        canvas_height = windowHeight - 140;
+        canvas_width = windowWidth - 40;
+
+        document.querySelector("canvas").width = windowWidth - 40;
+        document.querySelector("canvas").height = windowHeight - 140;
+
+        ctx.clearRect(0, 0, canvas_width, canvas_height);
         if(gamestate){
             //console.log("gamestate exists");
             for (let player of gamestate.player){
                 //Determine color
                 let playerIsMe = player.username==username;
                 //console.log(player.username, username,playerIsMe);
+                if(playerIsMe){
+                    //update the top bar
+                    if(player.life != previous_life){
+                        document.getElementById("stat-life-box").textContent = player.life;
+                        previous_life = player.life;
+                    }
+        
+                    if(gamestate.player.shielded != previous_shielded){
+                        document.getElementById("stat-shield-box").textContent = player.shielded? "shield" : "no shield";
+                        previous_shielded = player.shielded;
+                    }
+                }
 
                 //Transform server coordinate to client coordinate
                 const attacker = coorShift(player.attacker);
-                //console.log("attacker: ", attacker);
+                console.log("attacker: ", attacker);
                 const dodger = coorShift(player.dodger);
-                //console.log("dodger: ", dodger);
+                console.log("dodger: ", dodger);
 
                 //Draw the characters
                 drawCharacter(attacker,playerIsMe,"attacker");
                 drawCharacter(dodger,playerIsMe,"dodger");
+            }
+
+            for (const hp of gamestate.HPItem) {
+                if (hp.render) {
+                    drawCharacter(coorShift(hp),true,"hp");
+                }
+            }
+
+            for (const s of gamestate.shieldItem) {
+                if (s.render) {
+                    drawCharacter(coorShift(s),true,"shield");
+                }
             }
             
             if(!gamestate.gameover){

@@ -158,6 +158,7 @@ const Login = function () {
                 username_logged_in = userName;
                 console.log("logged in as: " + username_logged_in);
                 hide(); 
+                sounds.bgm.play();
                 GameMode.show(username_logged_in);
             } else if(json.status == "error"){
                 showWarning("signin", json.error);

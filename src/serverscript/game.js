@@ -139,8 +139,18 @@ const PVP = function(ID){
             //check if collected
             for(let i = 0 ; i < players.length ; i++){
                 let playeri = gamestate.player[i];
-                HPItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
-                HPItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addLife);
+                HPItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),
+                    ()=>{
+                        sockets[playeri.ID].emit("item","");
+                        playeri.dodger.obj.addLife();
+                    }
+                );
+                HPItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),
+                    ()=>{
+                        sockets[playeri.ID].emit("item","");
+                        playeri.dodger.obj.addLife();
+                    }
+                );
             }
         }
 
@@ -151,13 +161,23 @@ const PVP = function(ID){
             //check if collected
             for(let i = 0 ; i < players.length ; i++){
                 let playeri = gamestate.player[i];
-                shieldItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
-                shieldItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),playeri.dodger.obj.addShield);
+                shieldItem.checkCollected(playeri.attacker.obj.getPlayer().getEdge(),
+                    ()=>{
+                        sockets[playeri.ID].emit("item","");
+                        playeri.dodger.obj.addShield();
+                    }
+                );
+                shieldItem.checkCollected(playeri.dodger.obj.getPlayer().getEdge(),
+                    ()=>{
+                        sockets[playeri.ID].emit("item","");
+                        playeri.dodger.obj.addShield();
+                    }
+                );
             }
         }
 
         //check gameover
-        isOver();
+        isOver(sockets);
 
         //prepare the game state to be sent to the client
         const attackedge0 = gamestate.player[0].attacker.obj.getPlayer().getEdge();
@@ -216,16 +236,20 @@ const PVP = function(ID){
         sockets[players[1]].emit('update',JSON.stringify(gamestateToSend));
     }
 
-    const isOver = ()=>{
+    const isOver = (sockets)=>{
         //check if any player's dodger is touched by the attacker
         if(gamestate.player[0].dodger.obj.getPlayer().getEdge()
         .collideWith(gamestate.player[1].attacker.obj.getPlayer().getEdge()))
         {
             gamestate.player[0].dodger.obj.damaged();
             //check how many lives the dodger has
-            if(gamestate.player[0].dodger.obj.getLife()<=0){
+            if(!gamestate.player[0].dodger.obj.isAlive()){
+                console.log(gamestate.player[0].dodger.obj.getLife());
                 gamestate.gameover = true;
                 gamestate.winner = players[1];
+            }else{
+                sockets[players[0]].emit("damaged","");
+                sockets[players[1]].emit("explosion","");
             }
         }
 
@@ -234,9 +258,13 @@ const PVP = function(ID){
         {
             gamestate.player[1].dodger.obj.damaged();
             //check how many lives the dodger has
-            if(gamestate.player[1].dodger.obj.getLife()<=0){
+            if(!gamestate.player[1].dodger.obj.isAlive()){
+                console.log(gamestate.player[0].dodger.obj.getLife());
                 gamestate.gameover = true;
                 gamestate.winner = players[0];
+            }else{
+                sockets[players[1]].emit("damaged","");
+                sockets[players[0]].emit("explosion","");
             }
         }
     }
@@ -267,7 +295,15 @@ const PVP = function(ID){
         return gamestate;
     }
 
-    return {addPlayer,quitPlayer,getPlayersID,startGame,update,input,getID,getState}; 
+    const cheat = (playerID)=>{
+        for(let player of gamestate.player){
+            if(player.ID === playerID){
+                player.dodger.obj.addLife();   
+            }
+        }
+    }
+
+    return {addPlayer,quitPlayer,getPlayersID,startGame,update,input,getID,getState,cheat}; 
 };
 
 //Each game has a unique ID
@@ -387,8 +423,20 @@ const COOP = function(ID){
             //check if expired
             HPItem.update();
             //check if collected
-            HPItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
-            HPItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addLife);
+            HPItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),
+                ()=>{
+                    sockets[gamestate.player.attacker.ID].emit("item","");
+                    sockets[gamestate.player.dodger.ID].emit("item","");
+                    gamestate.player.dodger.obj.addLife()
+                }
+            );
+            HPItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),
+                ()=>{
+                    sockets[gamestate.player.attacker.ID].emit("item","");
+                    sockets[gamestate.player.dodger.ID].emit("item","");
+                    gamestate.player.dodger.obj.addLife()
+                }            
+            );
         }
 
         //update shield item
@@ -396,14 +444,36 @@ const COOP = function(ID){
             //check if expired
             shieldItem.update();
             //check if collected
-            shieldItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
-            shieldItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),gamestate.player.dodger.obj.addShield);
+            shieldItem.checkCollected(gamestate.player.attacker.obj.getPlayer().getEdge(),
+                ()=>{
+                    sockets[gamestate.player.attacker.ID].emit("item","");
+                    sockets[gamestate.player.dodger.ID].emit("item","");
+                    gamestate.player.dodger.obj.addShield();
+                }
+            );
+            shieldItem.checkCollected(gamestate.player.dodger.obj.getPlayer().getEdge(),
+                ()=>{
+                    sockets[gamestate.player.attacker.ID].emit("item","");
+                    sockets[gamestate.player.dodger.ID].emit("item","");
+                    gamestate.player.dodger.obj.addShield();
+                }
+            );
         }
 
         //update enemies position
         for(let i = 0 ; i < NUMOFENEMIES; i++){
-            gamestate.enemies[i].update(gamestate.player.attacker.obj,gamestate.player.dodger.obj);
+            if(gamestate.enemies[i].update(gamestate.player.attacker.obj,gamestate.player.dodger.obj)){
+                //if touched the dodger
+                if(gamestate.player.dodger.obj.isAlive()){
+                    //if dodger is alive
+                    sockets[gamestate.player.attacker.ID].emit("damaged","");
+                    sockets[gamestate.player.dodger.ID].emit("damaged","");
+                }
+            }
             if(!gamestate.enemies[i].isAlive()){
+                sockets[gamestate.player.attacker.ID].emit("explosion","");
+                sockets[gamestate.player.dodger.ID].emit("explosion","");
+
                 gamestate.point++;
                 //random initial position
                 //x: [-400,0] or [1200,1600]
@@ -415,7 +485,7 @@ const COOP = function(ID){
         }
         
         //check gameover
-        if(gamestate.player.dodger.obj.getLife()<=0){
+        if(!gamestate.player.dodger.obj.isAlive()){
             gamestate.gameover = true;
         }
 
@@ -485,7 +555,11 @@ const COOP = function(ID){
         return gamestate;
     }
 
-    return {addPlayer,quitPlayer,getPlayersID,startGame,update,input,getID,getState}; 
+    const cheat = (playerID)=>{
+        gamestate.player.dodger.obj.addLife();   
+    }
+
+    return {addPlayer,quitPlayer,getPlayersID,startGame,update,input,getID,getState,cheat}; 
 };
 
 module.exports = {PVP,COOP};

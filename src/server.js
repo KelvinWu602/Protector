@@ -37,7 +37,7 @@ function containWordCharsOnly(text) {
 // Handle the Ajax requests
 app.post("/register", (req,res)=>{
     const {username, password} = req.body;
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
     
     if(!(username.length > 0 && password.length > 0)){
         res.json({ status: "error", error: "Username and password cannot be empty." });
@@ -56,9 +56,9 @@ app.post("/register", (req,res)=>{
     //update the users.json file 
     const hash = bcrypt.hashSync(password, 10);
     users[username] = hash;
-    fs.writeFileSync("data/users.json", JSON.stringify(users,null,"    "));
+    fs.writeFileSync("./data/users.json", JSON.stringify(users,null,"    "));
     //update the users_data.json file
-    const users_data = JSON.parse(fs.readFileSync("data/users_data.json"));
+    const users_data = JSON.parse(fs.readFileSync("./data/users_data.json"));
     users_data[username] = {
         pvp : {
             win : 0,
@@ -68,7 +68,7 @@ app.post("/register", (req,res)=>{
             highest_point : 0,
         }
     };
-    fs.writeFileSync("data/users_data.json", JSON.stringify(users_data,null,"    "));
+    fs.writeFileSync("./data/users_data.json", JSON.stringify(users_data,null,"    "));
 
     console.log("User registered: " + username + " , " + password);
     res.json({ status: "success" });
@@ -98,7 +98,7 @@ app.post("/signin", (req,res)=>{
 });
 
 app.get("/validate", (req,res)=>{
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
 
     if(req.session.username){
         if(req.session.username in users){
@@ -127,7 +127,7 @@ app.get("/pvp",(req,res)=>{
         return;
     }
     //check if the user is registered
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
     if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
@@ -172,7 +172,7 @@ app.get("/attacker", (req,res)=>{
         return;
     }
     //check if the user is registered
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
     if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
@@ -216,7 +216,7 @@ app.get("/dodger", (req,res)=>{
         return;
     }
     //check if the user is registered
-    const users = JSON.parse(fs.readFileSync("data/users.json"));
+    const users = JSON.parse(fs.readFileSync("./data/users.json"));
     if(!req.session.username in users){
         res.json({ status: "error", error: "Please register." });
         return;
@@ -332,6 +332,10 @@ io.on("connection", (socket) => {
         for(let command of commands){
             game.input(PLAYERID,command.actor,command.movestate);
         }
+    });
+
+    socket.on("cheat",()=>{
+        game.cheat(PLAYERID);
     });
 
     socket.on("disconnect",()=>{

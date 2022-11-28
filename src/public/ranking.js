@@ -221,6 +221,12 @@ const ranking = function () {
     //Listener: Fired when click play again
     //Should return to GameMode screen allow player to choose gamemode again
     const backToGameMode = function () {
+        sounds.win.pause();
+        sounds.lose.pause();
+        sounds.win.currentTime = 0;
+        sounds.lose.currentTime = 0;
+        
+        sounds.bgm.play();
         document.querySelector(".RankingBodyBig").style.display = "none";
         //Socket.disconnect();
         GameMode.show(GameMode.getLoggedInUser());

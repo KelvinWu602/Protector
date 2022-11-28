@@ -58,8 +58,10 @@ module.exports.Enemy = function(ID,x,y, gamevariable) {
             }
             if(dodger.getPlayer().getEdge().collideWith(edge)){
                 dodger.damaged();
+                return true;
             }
         }
+        return false;
     }
 
     const getSpeed = () => {
