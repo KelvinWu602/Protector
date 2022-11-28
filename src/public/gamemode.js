@@ -60,7 +60,6 @@ const GameMode = function () {
 
     async function joinGame(type) {
         hide();
-
         loading.show();
         loading.changeText("Matching you with a player");
 

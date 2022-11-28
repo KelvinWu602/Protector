@@ -1,20 +1,20 @@
 {
     "kelvin": {
         "pvp": {
-            "win": 4,
+            "win": 18,
             "lose": 4
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 3
         }
     },
     "fox": {
         "pvp": {
             "win": 4,
-            "lose": 4
+            "lose": 18
         },
         "coop": {
-            "highest_point": 0
+            "highest_point": 3
         }
     },
     "Saber": {

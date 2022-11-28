@@ -14,16 +14,11 @@ const coopGame = function () {
     let previous_life = undefined; 
     let previous_shielded = undefined;
 
-    let attacker = new Image();
-        attacker.src = "attacker.png";
-    let dodger = new Image();
-        dodger.src= "dodger.png";
-    let hp =new Image();
-        hp.src="hp.png";
-    let shield =new Image();
-        shield.src="shield.png";
-    let enemy = new Image();
-        enemy.src="enemy.png";
+    let attacker_img = new Image();
+    let dodger_img = new Image();
+    let hp_img =new Image();
+    let shield_img =new Image();
+    let enemy_img = new Image();
 
     const key_mapping = {
         w: 1, //attacker control
@@ -56,6 +51,8 @@ const coopGame = function () {
                 moveState[0].movestate += key_mapping[e.key];
                 Socket.postInput(moveState);
             }
+        }else if(e.key === " ") {
+            Socket.postCheat();
         }
     };
 
@@ -74,17 +71,34 @@ const coopGame = function () {
     //Once constructed will be called
     console.log(ctx);
 
+    function loadImage(img,src){
+        img.src = src;
+        return img.decode();
+    }
+
+    async function loadAllImages(){
+        await loadImage(attacker_img,"/assets/attacker.png");
+        await loadImage(dodger_img,"/assets/dodger.png");
+        await loadImage(enemy_img,"/assets/enemy.png");
+        await loadImage(shield_img,"/assets/shield.png");
+        await loadImage(hp_img,"/assets/hp.png");
+    }
+
     /**
      * This function is called when socket received "startGame" event from the server
      */
-    function startGame(user, serverWidth, serverHeight) {
+    function startGame(user, serverWidth, serverHeight) {        
+        //stop bgm
+        sounds.bgm.pause();
+        sounds.bgm.currentTime = 0;
+        //play game bgm
+        sounds.ingame.play();
 
-        console.log("START GAME");
 
         username = user;
         server_height = serverHeight;
         server_width = serverWidth;
-
+        
         moveState = [
             {
                 actor: role,
@@ -92,20 +106,20 @@ const coopGame = function () {
             }
         ];
         gamestate = undefined;
+        
+        loadAllImages().then(()=>{
+            console.log("START GAME");
+            // set up event listeners
+            document.addEventListener('keydown', keydownHandler);
+            document.addEventListener("keyup", keyupHandler);
 
-        // set up event listeners
-        document.addEventListener('keydown', keydownHandler);
-        document.addEventListener("keyup", keyupHandler);
-        // document.querySelector("#stopGameTest").addEventListener("click", ()=> {
-        //     stopGame(); 
-        // });
-
-        //Remove Loading Screen
-        loading.hide();
-        //Show Game Screen
-        show();
-        //Calls first frame
-        draw();
+            //Remove Loading Screen
+            loading.hide();
+            //Show Game Screen
+            show();
+            //Calls first frame
+            draw();
+        });
     }
 
     /**
@@ -113,7 +127,12 @@ const coopGame = function () {
      * @param stats users_data.json 
      */
     function stopGame(stats) {
+        sounds.ingame.pause();
+        sounds.ingame.currentTime = 0;
+
         gameIsGoing = false;
+
+        
 
         //remove the Key Event Listeners 
         document.removeEventListener('keydown', keydownHandler);
@@ -123,13 +142,12 @@ const coopGame = function () {
 
         Socket.disconnect();
 
+        if(stats[username].coop.highest_point <= gamestate.point){
+            sounds.lose.play();
+        }else{
+            sounds.win.play();
+        }
         //Show the Stat Screen
-        //Server will pass the user stats to the client
-        //gamestate is also passed to the ranking page to extract relevant data
-        //Stats screen is different based on the gamemode
-
-        //@TODO Dependency issue here, need to restructure the code for higher modularity
-        //Modules are interdependent, need to fix this
         ranking.showRanking(stats, gamestate, "coop");
     }
 
@@ -173,11 +191,10 @@ const coopGame = function () {
      * 
     */
     function coorShift(serverRect) {
+        const {x,y,w,h} = serverRect;
 
-        x = serverRect.x;
-        y = serverRect.y;
-        w = serverRect.w;
-        h = serverRect.h;
+        console.log(canvas_width,canvas_height);
+
 
         const serverWH = server_width / server_height;
         const clientWH = canvas_width / canvas_height;
@@ -216,20 +233,18 @@ const coopGame = function () {
     function  drawCharacter(rect, role)
       {
         const { x, y, w, h } = rect;
-      if (role == "attacker") 
-        {
-        ctx.drawImage(attacker,x,y,w,h)
+        if (role == "attacker") {
+            ctx.drawImage(attacker_img,x,y,w,h)
         }
-         else if (role == "dodger")
-         {
-            ctx.drawImage(dodger,x,y,w,h)
+        else if (role == "dodger") {
+            ctx.drawImage(dodger_img,x,y,w,h)
         } else if (role == "hp") {
-            ctx.drawImage(hp,x,y,w,h)
+            ctx.drawImage(hp_img,x,y,w,h)
         } else if (role == "shield") {
-            ctx.drawImage(shield,x,y,w,h)
-
-        } else {ctx.drawImage(enemy,x,y,w,h) };
-
+            ctx.drawImage(shield_img,x,y,w,h)
+        } else {
+            ctx.drawImage(enemy_img,x,y,w,h) 
+        };
      }
      
 
@@ -283,7 +298,7 @@ const coopGame = function () {
 
             drawCharacter(coorShift(gamestate.player.attacker), "attacker");
             drawCharacter(coorShift(gamestate.player.dodger), "dodger");
-            console.log("ddd");
+
             for (const hp of gamestate.HPItem) {
                 if (hp.render) {
                     drawCharacter(coorShift(hp), "hp");

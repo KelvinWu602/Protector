@@ -134,7 +134,27 @@ const Socket = (function() {
         socket.on("gameover",(stats)=>{
             stats = JSON.parse(stats);
             mainGame.stopGame(stats);
-        })
+        });
+
+        //Sound effects
+        socket.on("item", (msg)=>{
+            sounds.item.pause();
+            sounds.item.currentTime = 0;
+            sounds.item.play();
+        });
+
+        socket.on("explosion",(msg)=>{
+            sounds.explosion.pause();
+            sounds.explosion.currentTime = 0;
+            sounds.explosion.play();
+        });
+
+        socket.on("damaged",(msg)=>{
+            if(sounds.lose.duration <= 0 || sounds.lose.paused){
+                sounds.lose.play();
+            }
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -153,7 +173,7 @@ const Socket = (function() {
 
     const postCheat = () => {
         console.log("Post Cheat");
-        socket.emit("cheat", "");
+        socket.emit("cheat","");
     }
 
     // // This function sends a post message event to the server

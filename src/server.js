@@ -334,6 +334,10 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("cheat",()=>{
+        game.cheat(PLAYERID);
+    });
+
     socket.on("disconnect",()=>{
         console.log("User " + PLAYERID + " disconnected socket.");
         game.quitPlayer(PLAYERID);

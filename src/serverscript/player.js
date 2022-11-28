@@ -91,13 +91,14 @@ const Dodger = function(initx, inity, gamevariable) {
         if(!shielded){
             if(Date.now()>immutableTime){
                 life--;
+                immutableTime = Date.now()+3000;    
             }
         } else {
             shielded=false; 
             immutableTime = Date.now()+3000;    
         } 
     }
-    const isAlive = ()=>life>0;
+    const isAlive = ()=>{return life>0};
     return {getPlayer,getType,getLife,getShielded,addLife,addShield,damaged,isAlive};
 }
 

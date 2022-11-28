@@ -241,6 +241,19 @@
 
 </body>
 
+<script>
+    const sounds = {
+        bgm: new Audio('./sound/bgm.mp3'),
+        ingame: new Audio('./sound/ingame.mp3'),
+        lose: new Audio('./sound/lose.mp3'),
+        win: new Audio('./sound/win.mp3'), 
+        explosion: new Audio('./sound/item.mp3'), 
+        item: new Audio('./sound/item.mp3'),
+    }
+    sounds.bgm.loop = true;
+    sounds.ingame.loop = true;
+</script>
+
 <script src="/socket.io/socket.io.min.js"></script>
 
 <script src="loading.js"></script>
@@ -258,7 +271,6 @@
     //The eqivalent of the jquery document ready
     ranking.init();
     loading.hide();
-
     //ranking.showRanking();
 </script>
 
