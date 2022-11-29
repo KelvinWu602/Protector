@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    
+
     <div class="homebodyBig">
         <div class="title">
             <h1>P R O T E C T O R</h1>
@@ -81,27 +81,23 @@
                         Protector Game
                     </h1>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum odit dignissimos quasi, sed
-                        beatae
-                        soluta
-                        mollitia enim officiis architecto nam? Nobis debitis repellendus architecto possimus veniam odio
-                        itaque
-                        nulla corrupti.
+                        In the year 2399, when Earth was rendered unhabitable by climate change, the ship
+                        <strong>Prometheus</strong> was humanity’s final hope. Built jointly by NASA and SpaceX, docked
+                        at the andromeda galaxy, it is home to 50K people.
                     </p>
                     <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt molestiae, architecto iure
-                        delectus
-                        esse libero commodi magnam facere cumque omnis, suscipit corrupti neque sunt sequi fugit unde
-                        modi
-                        magni
-                        tenetur!
+                        The separatist rebel group led by terrorist leader, however, is determined to take the ship by
+                        force. When the army of thirty thousand ships showed up on Prometheus’s radar, it is clear
+                        that the ship will not stand a chance.
                     </p>
-
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem molestiae rem provident aliquam
-                        corporis voluptas eveniet, maxime non at in aut ab doloremque? Enim magni eveniet aperiam ipsa
-                        neque
-                        fuga?
+                        The president had ordered an evacuation by ejecting delta-sleep life pods in the hope that the
+                        nearby colony Odyssey can pick up some survivor. But evacuation takes time. The decommissioned
+                        battle-class destroyer, <strong>Kerberos</strong> is the only hope for buying that time.
+                    </p>
+                    <p>
+                        Hop onboard the Kerberos and fight the good fight! Brave souls, <i>do not go gentle into that
+                            good night!</i>
                     </p>
                 </div>
             </div>
@@ -111,7 +107,7 @@
 
     <!-- Loading Screen -->
     <div class="Loading">
-        <div id = "fancy-spinner"></div>
+        <div id="fancy-spinner"></div>
         <div>
             <p id='loading-text'>
                 Loading...
@@ -126,11 +122,10 @@
                 <h1>
                     COOP - Attacker
                 </h1>
-                <div class = "GamemodePartition"></div>
+                <div class="GamemodePartition"></div>
                 <p>
-                    Do not go gentle into that good night,
-                    Old age should burn and rave at close of day;
-                    Rage, rage against the dying of the light.
+                    Jump on board the decommissioned battle-class destroyer Kerberos and use the it's quantum field to
+                    destroy incoming enemies. You will not last long but the fight will be glorious!
                 </p>
             </div>
             <button class="GamemodeButton" id="COOP_attacker_btn">
@@ -143,15 +138,14 @@
                 <h1>
                     COOP - Dodger
                 </h1>
-                <div class = "GamemodePartition"></div>
+                <div class="GamemodePartition"></div>
                 <p>
-                    Though wise men at their end know dark is right,
-                    Because their words had forked no lightning they
-                    Do not go gentle into that good night.
+                    Take the role of a senior captain. Pilot the Prometheus out of enemy for as long as possible. The
+                    longer you survive, the more survivors can be rescured.
                 </p>
             </div>
-            
-            <button class="GamemodeButton" id = "COOP_dodger_btn">
+
+            <button class="GamemodeButton" id="COOP_dodger_btn">
                 PLAY
             </button>
         </div>
@@ -160,11 +154,10 @@
                 <h1>
                     PVP
                 </h1>
-                <div class = "GamemodePartition"></div>
+                <div class="GamemodePartition"></div>
                 <p>
-                    Good men, the last wave by, crying how bright
-                    Their frail deeds might have danced in a green bay,
-                    Rage, rage against the dying of the light.
+                    Attack is the best defense. Take Prometheus and the Kerberos straight into enemy territories and
+                    test the survive of the finest!
                 </p>
             </div>
             <button class="GamemodeButton" id="PVP_btn">
@@ -179,39 +172,39 @@
 
     <!-- Game Canvas -->
     <div class="mainGame">
-        <div class = "StatBox">
-            <div class = "HUDBox">
-                <div class = "CanvasDescription">
+        <div class="StatBox">
+            <div class="HUDBox">
+                <div class="CanvasDescription">
                     Attacker:
                 </div>
-                <div class = "CanvasUserName">
+                <div class="CanvasUserName">
                     Saber Athena
                 </div>
             </div>
             <div class="CanvasParition"></div>
-            <div class = "HUDBox">
-                <div class = "CanvasDescription">
+            <div class="HUDBox">
+                <div class="CanvasDescription">
                     Defender:
                 </div>
-                <div class = "CanvasUserName">
+                <div class="CanvasUserName">
                     Cherno Alpha
                 </div>
             </div>
             <div class="CanvasParition"></div>
-            <div class = "HUDBox">
-                <div class = "CanvasDescription">
+            <div class="HUDBox">
+                <div class="CanvasDescription">
                     Life:
                 </div>
-                <div id = "stat-life-box">
+                <div id="stat-life-box">
                     Life
                 </div>
             </div>
             <div class="CanvasParition"></div>
-            <div class = "HUDBox">
-                <div class = "CanvasDescription">
+            <div class="HUDBox">
+                <div class="CanvasDescription">
                     Shield:
                 </div>
-                <div id = "stat-shield-box">
+                <div id="stat-shield-box">
                     Shield
                 </div>
             </div>
@@ -246,8 +239,8 @@
         bgm: new Audio('./sound/bgm.mp3'),
         ingame: new Audio('./sound/ingame.mp3'),
         lose: new Audio('./sound/lose.mp3'),
-        win: new Audio('./sound/win.mp3'), 
-        explosion: new Audio('./sound/item.mp3'), 
+        win: new Audio('./sound/win.mp3'),
+        explosion: new Audio('./sound/item.mp3'),
         item: new Audio('./sound/item.mp3'),
     }
     sounds.bgm.loop = true;
